@@ -1,0 +1,42 @@
+SESSIONS = []
+SESSION_IND = -1
+SESSIONS_PAGE = 0
+
+#game_info
+APP_STATE = "MENU MAIN"
+GAME_MODE = "BOT"
+
+STATE = []
+PLAYER_COLOR = WHITE_CHECKER[:]
+REVERSED_ORIENTATION = False
+CUR_COLOR = WHITE_CHECKER[:]
+
+SELECTED_CHECKER = DEFAULT_SELECTED_CHECKER[:]
+AVALIBLE_CELLS = []
+IS_EATEN = False
+
+EXISTING_CHECKERS = [[], []]
+AVALIBLE_CHECKERS = [[], []]
+
+IS_SELECT_LOCKED = False
+#game_info
+
+#menu_stuffs
+BUTTONS = []
+#menu_stuffs
+
+#config
+USERNAME = "Eblan"
+
+C_LOAD_SESSIONS_ON_STARTUP = True
+C_SAVE_SESSIONS_ON_EXIT = True
+C_DELETE_AFTER_END = False
+#config
+
+KEYS_TO_NUMBERS = {pygame.K_1:1, pygame.K_2:2, pygame.K_3:3, pygame.K_4:4}
+
+RUNNUNG = True
+
+def ExitApp():
+    global RUNNUNG
+    RUNNUNG = False
