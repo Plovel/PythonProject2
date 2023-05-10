@@ -7,10 +7,15 @@ PATH_TO_SRC = "src/"
 FILES_SEQUENCE = ["constants",
                   "pygame_init",
                   "global_zone",
-                  "draw", "game_core",
-                  "sessions",
+                  "config",
+                  "draw",
+                  "game_core",
+                  "network",
                   "gamemodes",
-                  "menu",
+                  "button",
+                  "sessions",
+                  "menu_tools",
+                  "menus",
                   "handlers",
                   "main"]
 
@@ -28,11 +33,11 @@ def ToPrint(message):
     right = IMPORT_MESSAGE_LEN - 1 - len(message) - left
     return ('#' + '-' * left + message + '-' * right)
 
-with open(PATH_FOR_OUTPUT + PROJECT_NAME, 'w') as project:
+with open(PATH_FOR_OUTPUT + PROJECT_NAME, 'w', encoding="utf-8") as project:
     def AddFile(filename):
         first_message = filename + " BEGIN"
         second_message = filename + " END"
-        with open(filename, 'r') as file:
+        with open(filename, 'r', encoding="utf-8") as file:
             print(ToPrint(first_message), file=project)
             print(file.read(), file=project)
             print(ToPrint(second_message), file=project)
