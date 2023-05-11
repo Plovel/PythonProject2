@@ -36,19 +36,20 @@ def SetUpSockets():
     SOCKET_R = socket.socket()
     SOCKET_S = socket.socket()
     try:
-        if not SOCKET_R.connect_ex((HOST, PORT_R)):
+        if True:
             try: SOCKET_R.bind((HOST, PORT_R))
             except:
-                try: globals()["PORT_R"] = PORTS_R[1]; SOCKET_R.bind((HOST, PORT_R)); print("I USED ADDITIONAL R PORT")
+                try: globals()["PORT_R"] = PORTS_R[1]; SOCKET_R.bind((HOST, PORT_R)); 
                 except: return "Failed to set recieve socket"
-        if not SOCKET_S.connect_ex((HOST, PORT_S)):
+        if True:
             try: SOCKET_S.bind((HOST, PORT_S))
             except:
-                globals()["PORT_S"] = PORTS_S[1]; SOCKET_S.bind((HOST, PORT_S)); print("I USED ADDITIONAL S PORT")
-                try: globals()["PORT_R"] = PORTS_R[1]; SOCKET_R.bind((HOST, PORT_R)); print("I USED ADDITIONAL R PORT")
-                except: return "Failed to set sending socket"
+                try: globals()["PORT_S"] = PORTS_S[1]; SOCKET_S.bind((HOST, PORT_S)); 
+                except: return "Faied to set sending socket" 
     except: return "Unknown reason"
     SOCKET_R.listen(1)
+    print(f"I USED {PORT_R} AS R PORT")
+    print(f"I USED {PORT_S} AS S PORT")
     return ""
 
 #print("I AM USING", PORT_R, "AS R AND", PORT_S, "AS S")
@@ -67,10 +68,9 @@ def EstConnection(is_opening):
         try:
             try:
                 SOCKET_S.settimeout(1)
-                #print("TRYING TO CONNECT TO", (IP_TO_CONNECT, PORTS_R[0]))
-                SOCKET_S.connect((IP_TO_CONNECT, PORTS_R[0]))
+                if PORTS_R != PORTS_R[0]: SOCKET_S.connect((IP_TO_CONNECT, PORTS_R[0]))
+                else: raise Exception("I dont want to connect to my port")
             except:
-                #print("FAILED, TRYING", (IP_TO_CONNECT, PORTS_R[1]))
                 SOCKET_S = socket.socket()
                 SOCKET_S.bind((HOST, PORT_S))
                 SOCKET_S.settimeout(1)
@@ -95,9 +95,11 @@ def Connect():
     
     try: res += EstConnection(IS_OPENING_GAME)
     except: return
+    if res: return
     
     try: res += EstConnection(not IS_OPENING_GAME)
     except: return
+    if res: return
     
     print("Connection Established")
     globals()["IS_CONNECTED"] = True
