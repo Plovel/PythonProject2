@@ -17,7 +17,9 @@ DEFAULT_CONFIG = {'WHITE_CELL': (255, 255, 255),
                   'READ_CONFIG_ON_STARTUP': True,
                   'SAVE_CONFIG_ON_EXIT': True,
 
-                  'USERNAME': 'Ivan Nikolayevich'}
+                  'USERNAME': 'Ivan Nikolayevich',
+                  'HOST': '',
+                  'IP_TO_CONNECT': ''}
 
 AVALIBLE_CONFIG_NAMES = ("WHITE_CELL",
                          "BLACK_CELL",
