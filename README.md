@@ -1,13 +1,13 @@
 # Python Project
 
 ## Table of contents:
-- [About]()
-- [Installation and Quick-Start]()
-  - [Installation]()
-  - [Quick-Start]()
-- [Known bugs]()
-- [To do]()
-- [Collaborators]()
+- [About](https://github.com/Plovel/PythonProject2/tree/dev#about)
+- [Installation and Quick-Start](https://github.com/Plovel/PythonProject2/tree/dev#installation-and-quick-start)
+  - [Installation](https://github.com/Plovel/PythonProject2/tree/dev#installation)
+  - [Quick-Start](https://github.com/Plovel/PythonProject2/tree/dev#quick-start)
+- [Known bugs](https://github.com/Plovel/PythonProject2/tree/dev#known-bugs)
+- [To do](https://github.com/Plovel/PythonProject2/tree/dev#to-do)
+- [Collaborators](https://github.com/Plovel/PythonProject2/tree/dev#collaborators)
 
 
 ## About
