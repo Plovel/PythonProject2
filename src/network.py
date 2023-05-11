@@ -8,6 +8,8 @@ IP_TO_CONNECT = "127.0.0.1"
 
 PORTS_R = (2000, 2001)
 PORTS_S = (3000, 3001)
+RESERVED_PORT = 8237
+
 PORT_R = None
 PORT_S = None
 
@@ -44,15 +46,22 @@ def SetUpSockets():
     try:
         if not PORT_R_FLAG:
             for port in PORTS_R:
-                try: SOCKET_R.bind((HOST, port))
-                except: continue
-                PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT"); PORT_R_FLAG = True; break
+                try:
+                    sk = socket.socket()
+                    sk.bind((HOST, port))
+                    sk.settimeout(1)
+                    res = 1 #sk.connect_ex((IP_TO_CONNECT, port))
+                    if res == 0:
+                        print(res, f"R PORT {port} IS BUSY")
+                        continue
+                    SOCKET_R = sk; PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT", HOST); PORT_R_FLAG = True; break
+                except: pass            
             else: return "Failed to find free R port"
         if not PORT_S_FLAG:
             for port in PORTS_S:
                 try: SOCKET_S.bind((HOST, port))
                 except: continue
-                PORT_S = port; print(f"I USED {PORT_S} AS S PORT"); PORT_S_FLAG = True; break
+                PORT_S = port; print(f"I USED {PORT_S} AS S PORT", HOST); PORT_S_FLAG = True; break
             else: return "Failed to find free S port"
     except: raise Exception("how"); return "Unknown reason"
     return ""
@@ -65,14 +74,14 @@ def EstConnection(is_opening):
     global IP_TO_CONNECT
     if is_opening:
         try:
-            SOCKET_R.settimeout(1)
+            SOCKET_R.settimeout(10)
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
     else:
         try:
             port_to_connect = PORTS_R[PORT_R == PORTS_R[0]]
-            SOCKET_S.settimeout(0.1)
+            SOCKET_S.settimeout(1)
             for port in PORTS_R:
                 if PORT_R == port: continue
                 try: SOCKET_S.connect((IP_TO_CONNECT, port))
@@ -98,10 +107,14 @@ def Connect():
     if res: ExitMultiplayer("Failed to open ports\nReason: " + res, menu=None); return
     
     res += EstConnection(IS_OPENING_GAME)
-    if res: return
+    if res:
+        #print(res)
+        return
     
     res += EstConnection(not IS_OPENING_GAME)
-    if res: return
+    if res:
+        #print(res)
+        return
     
     print("Connection Established")
     globals()["IS_CONNECTED"] = True
