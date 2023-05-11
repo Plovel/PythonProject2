@@ -88,7 +88,7 @@ class Button:
 
     def check_mouse(self, pos):
         is_on_button = (self.point[0] <= pos[0] <= self.point[0] + self.size[0]) and (self.point[1] <= pos[1] <= self.point[1] + self.size[1])
-        if not is_on_button: self.pressed = False
+        if self.pressed and not is_on_button: self.pressed = False; pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
         expected_color = (self.unselected_color[:], [[self.color[:], self.corner_color[:]][self.mode == "SELECT"], self.pressed_color[:]][self.pressed])[is_on_button]
         if expected_color != self.color:
             self.color = expected_color

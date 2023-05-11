@@ -41,9 +41,8 @@ while RUNNUNG:
                 SESSION_IND = -1
             SetMenu("SESSIONS")
         elif PLAYER_COLOR != CUR_COLOR and GAME_MODE != "BOT_VS_BOT": RunGameTurn()
-    if APP_STATE == "MENU WAITING_FOR_PLAYER":
-        CheckPlayer()
-        pass
+    if GAME_MODE == "MULTIPLAYER": OtherPlayerHandler()
+    if APP_STATE.startswith("MENU WAITING_FOR_PLAYER"): Connect()
     pygame.display.update() #can be removed
 
 #exiting
@@ -52,7 +51,6 @@ if SAVE_CONFIG_ON_EXIT:
     res = WriteConfigToFile()
     if res: ShowText(res)
     #else: ShowText("Config was saved")
-SOCKET_R.close()
-SOCKET_S.close()
+Disconnect()
 pygame.quit()
 #exiting

@@ -1,6 +1,6 @@
 AVALIBLE_BUTTONS = {"MAIN":"G - Change game mode\nM - Go here from any menu\nT - Eblan Menu",
                     "SESSIONS":"Esc - Go to main menu\nG - Change game mode\nN - New session\nS - Save sessions to file\nR - Read sessions from file\nArrows < > - Change page\n[1, 2, 3, 4] - Select Game\nO - connect to another player",
-                    "GAME":"Esc - Session saving dialog\nG - Change game mode\nR - Rotate field\nS - Save the session\nQ - Exit to sessions (no saving)\nO - make session avalible for connection",
+                    "GAME":"Esc - Session saving dialog\nG - Change game mode\nR - Rotate field\nS - Save the session\nQ - Exit to sessions (no saving)\nO - accept connection",
                     "SETTINGS":"Esc - Go to main menu",
                     "EXITING_GAME":"Esc - Back to game",
                     "SELECTING_COLOR":"Esc - Back to sessions",
@@ -8,13 +8,52 @@ AVALIBLE_BUTTONS = {"MAIN":"G - Change game mode\nM - Go here from any menu\nT -
                     }
 
 def ShowAvalibleButtons(menu):
-    message = AVALIBLE_BUTTONS.get(menu, "РАЗРАБОТЧИК EBLAN\nКНОПОЧКИ НЕ ПРОСТАВИЛ")
+    message = AVALIBLE_BUTTONS.get(menu, "DEV DID NOT TELL\nWHAT TO SHOW HERE")
     ShowText(message)
 
 def EmulateButtonPressSound():
     pygame.mixer.Sound.play(random.choice(BUTTON_DOWN_SOUNDS))
-    time.sleep(0.1)
+    pygame.time.wait(100)
     pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
+
+def PressButton(button):
+    global PLAYER_COLOR
+    action = button.action
+    #print("ACTIVATED BUTTON", button.text)
+    if action == "NONE": return
+    if action.startswith("PLAY"): RunSession(int(action[5:]))
+    elif action.startswith("SET_MENU"): SetMenu(action[9:])
+    elif action.startswith("SET_GAME"): ClearScreen(); RunGame(False)
+    elif action == "SETTINGS": SetMenu("SETTINGS")
+    elif action == "APPLY_VAR":
+        var = BUTTONS[0].text[8:]
+        try: val = eval(BUTTONS[1].text.replace('|', ''))
+        except: ShowText("Trash value..."); return;
+        if var == "COMMAND_TO_EXECUTE":
+            globals()[var] = val
+            if not RUN_COMMAND(COMMAND_TO_EXECUTE): ShowText("Ahahaahahahh something\nbad happened....", **{"col":RED, "txt_col":BLUE})
+        else:
+            try: SetConfig({var:val})
+            except: ShowText("Something went wrong")
+        SetMenu(InitInput.MENU_BKP)
+    elif action == "EXIT_APP": ExitApp()
+    elif action == "EXIT_APP+": ExitApp()
+    elif action == "SHOW_SESSIONS": SetMenu("SESSIONS")
+    elif action == "NEW_GAME": ResetGame(); SetMenu("SELECTING_COLOR")
+    elif action == "SELECT_WHITE":
+        PLAYER_COLOR = 'W'
+        RunSession(SESSION_IND)
+    elif action == "SELECT_BLACK":
+        PLAYER_COLOR = 'B'
+        RunSession(SESSION_IND)
+    elif action.startswith("DELETE"):
+        DeleteSession(int(action[6:]))
+        SetMenu("SESSIONS")
+    elif action.endswith("SAVE_SESSION"):
+        if GAME_MODE == "MULTIPLAYER": Disconnect()
+        if action == "SAVE_SESSION":
+            SaveSession(SESSION_IND)
+        SetMenu("SESSIONS")
 
 def InputHandler(event):
     char = event.unicode
@@ -47,8 +86,11 @@ def GameHandler(event):
             if SESSION_IND == -1: SESSION_IND = len(SESSIONS) - 1
             ShowText("Session Saved", timer=0.3)
         elif event.key == pygame.K_x: ShowAvalibleButtons("GAME") #
-        elif event.key == pygame.K_q: SetMenu("SESSIONS") #
-        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER"); Connect(True)
+        elif event.key == pygame.K_q:
+            if GAME_MODE == "MULTIPLAYER": Disconnect()
+            SetMenu("SESSIONS") #
+        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True")
+            
 
 MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))
 def MenuHandler(event):
@@ -66,7 +108,6 @@ def MenuHandler(event):
                     if was_pressed:
                         button.unpress()
                         if button.action == "NONE": continue
-                        print("ACTIVATED BUTTON", button.text)
                         PressButton(button)
                 
         pygame.display.flip()
@@ -137,7 +178,7 @@ def MenuHandler(event):
         elif event.key == pygame.K_n: #
             if menu == "SESSIONS": EmulateButtonPressSound(); ResetGame(); SetMenu("SELECTING_COLOR")
         elif event.key == pygame.K_o:
-            if menu == "SESSIONS": Connect(False)
+            if menu == "SESSIONS": SetMenu("WAITING_FOR_PLAYER False")
         elif event.key == pygame.K_x: ShowAvalibleButtons(menu) #shouldnt be shown in shortcuts
         elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP"))
         elif event.key in KEYS_TO_NUMBERS: #

@@ -21,6 +21,8 @@ def SetMainMenu():
 def ShowSettings():
     SetSelectMenu(({"txt":"Edit config", "act":"SET_MENU CONFIG", "col":WHITE, "txt_col":ORANGE},
                    {"txt":"Change username", "act":"SET_MENU INPUT USERNAME", "col":GREY, "txt_col":ORANGE},
+                   {"txt":"Set my ip", "act":"SET_MENU INPUT HOST", "col":GREY, "txt_col":ORANGE},
+                   {"txt":"Set other player ip", "act":"SET_MENU INPUT IP_TO_CONNECT", "col":GREY, "txt_col":ORANGE},
                    {"txt":"Back to main menu", "act":"SET_MENU MAIN"}))
 
 def ChangeGameMode():
@@ -43,10 +45,12 @@ def ChangeGameMode():
             SyncWithPlayerColor(True)
     ShowText(message, timer=3)
 
-def ShowPlayerWaiting():
-    DrawField()
-    SetSelectMenu(({"txt":"Waiting for player", "mode":"BASIC", "col":BLUE},
-                   {"txt":"Back to game", "act":"SET_GAME"}))
+def ShowPlayerWaiting(is_opening):
+    global IS_OPENING_GAME, timer_for_opening
+    IS_OPENING_GAME = is_opening
+    timer_for_opening = time.time()
+    if is_opening: DrawField()
+    SetSelectMenu(({"txt":"Waiting for player", "col":BLUE, "cor_col":GREEN , "mode":"BASIC"}, {"txt":"???", "col":BLUE, "cor_col":RED, "mode":"BASIC"}), SPACE=10, COVERAGE=(20, 60))
 
 COMMAND_TO_EXECUTE = "echo ahaha"
 changing_variable = "WHITE_CHECKER"
@@ -115,42 +119,7 @@ def SetMenu(menu):
     elif menu == "SETTINGS": ShowSettings()
     elif menu == "CONFIG": SetConfigMenu(0)
     elif menu == "SELECTING_COLOR": SelectingColour()
-    elif menu == "WAITING_FOR_PLAYER": ShowPlayerWaiting()
+    elif menu.startswith("WAITING_FOR_PLAYER"): ShowPlayerWaiting(APP_STATE[24:] == "True")
     pygame.display.update()
 
-def PressButton(button):
-    global PLAYER_COLOR
-    action = button.action
-    if action == "NONE": return
-    if action.startswith("PLAY"): RunSession(int(action[5:]))
-    elif action.startswith("SET_MENU"): SetMenu(action[9:])
-    elif action.startswith("SET_GAME"): ClearScreen(); RunGame(False)
-    elif action == "SETTINGS": SetMenu("SETTINGS")
-    elif action == "APPLY_VAR":
-        var = BUTTONS[0].text[8:]
-        try: val = eval(BUTTONS[1].text.replace('|', ''))
-        except: ShowText("Trash value..."); return;
-        if var == "COMMAND_TO_EXECUTE":
-            globals()[var] = val
-            if not RUN_COMMAND(COMMAND_TO_EXECUTE): ShowText("Ahahaahahahh something\nbad happened....", **{"col":RED, "txt_col":BLUE})
-        else:
-            try: SetConfig({var:val})
-            except: ShowText("Something went wrong")
-        SetMenu(InitInput.MENU_BKP)
-    elif action == "EXIT_APP": ExitApp()
-    elif action == "EXIT_APP+": RUN_COMMAND(); ExitApp()
-    elif action == "SHOW_SESSIONS": SetMenu("SESSIONS")
-    elif action == "NEW_GAME": ResetGame(); SetMenu("SELECTING_COLOR")
-    elif action == "SELECT_WHITE":
-        PLAYER_COLOR = 'W'
-        RunSession(SESSION_IND)
-    elif action == "SELECT_BLACK":
-        PLAYER_COLOR = 'B'
-        RunSession(SESSION_IND)
-    elif action.startswith("DELETE"):
-        DeleteSession(int(action[6:]))
-        SetMenu("SESSIONS")
-    elif action.endswith("SAVE_SESSION"):
-        if action == "SAVE_SESSION":
-            SaveSession(SESSION_IND)
-        SetMenu("SESSIONS")
+

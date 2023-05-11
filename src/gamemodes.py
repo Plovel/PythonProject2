@@ -11,11 +11,11 @@ def ClickFunc(pos):
     
     if STATE[ind] == ' ':
         if Move(ind) and GAME_MODE == "MULTIPLAYER":
-            try: SOCKET_S.send(("MOVE " + str(ind) + ' ').encode())
+            try: SOCKET_S.send(("MOVE_" + str(ind) + ' ').encode())
             except: Disconnect()
     else:
         if SelectChecker(ind) and GAME_MODE == "MULTIPLAYER":
-            try: SOCKET_S.send(("SELECT " + str(ind) + ' ').encode())
+            try: SOCKET_S.send(("SELECT_" + str(ind) + ' ').encode())
             except: Disconnect()
 
 def PlayerMove(): ClickFunc(pygame.mouse.get_pos())
