@@ -52,14 +52,11 @@ def CheckSocket(host, port):
 
 def SetUpSockets():
     global SOCKET_R, SOCKET_S, PORT_R_FLAG, PORT_S_FLAG, PORT_R, PORT_S
-    SOCKET_R.close()
-    SOCKET_R = socket.socket()
-    SOCKET_R.settimeout(0.1)
 
-    SOCKET_S.close()
-    SOCKET_S = socket.socket()
-    SOCKET_S.settimeout(0.1)
     if not PORT_R_FLAG:
+        SOCKET_R.close()
+        SOCKET_R = socket.socket()
+        SOCKET_R.settimeout(0.1)
         for port in PORTS_R:
             if CheckSocket(HOST, port):
                 print(res, f"R PORT {port} IS BUSY")
@@ -70,6 +67,9 @@ def SetUpSockets():
             SOCKET_R = sk; PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT", HOST); PORT_R_FLAG = True; break         
         else: return "Failed to find free R port"
     if not PORT_S_FLAG:
+        SOCKET_S.close()
+        SOCKET_S = socket.socket()
+        SOCKET_S.settimeout(0.1)
         for port in PORTS_S:
             try: SOCKET_S.bind((HOST, port))
             except: continue
