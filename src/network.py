@@ -8,6 +8,7 @@ IP_TO_CONNECT = "127.0.0.1"
 
 PORTS_R = (2000, 2001)
 PORTS_S = (3000, 3001)
+if 0: PORTS_R, PORTS_S = PORTS_R[::-1], PORTS_S[::-1]
 RESERVED_PORT = 8237
 
 PORT_R = None
@@ -34,6 +35,21 @@ def ExitMultiplayer(txt, menu="MAIN"):
     if txt: ShowText(txt, txt_col=ORANGE)
     if not menu is None: SetMenu(menu)
 
+def CheckSocket(host, port):
+    #global SOCKET_S, PORT_S_FLAG
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    res = True
+    for i in range(10):
+        skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("CHECKING", (host, port), skt.connect_ex((host, port)) == 0)
+        skt.close()
+    try: sock.connect((host, port))
+    except: sock.close(); res = False
+    sock.close()
+    if res: print((host, port), "IS BUSY")
+    else: print((host, port), "IS FREE")
+    return res
+
 def SetUpSockets():
     global SOCKET_R, SOCKET_S, PORT_R_FLAG, PORT_S_FLAG, PORT_R, PORT_S
     SOCKET_R.close()
@@ -43,30 +59,23 @@ def SetUpSockets():
     SOCKET_S.close()
     SOCKET_S = socket.socket()
     SOCKET_S.settimeout(0.1)
-    try:
-        if not PORT_R_FLAG:
-            for port in PORTS_R:
-                try:
-                    sk = socket.socket()
-                    sk.bind((HOST, port))
-                    sk.settimeout(0.1)
-                    res = 1 #sk.connect_ex((IP_TO_CONNECT, port))
-                    if res == 0:
-                        print(res, f"R PORT {port} IS BUSY")
-                        continue
-                    SOCKET_R = sk; PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT", HOST); PORT_R_FLAG = True; break
-                except: pass            
-            else: return "Failed to find free R port"
-        if not PORT_S_FLAG:
-            for port in PORTS_S:
-                try: SOCKET_S.bind((HOST, port))
-                except: continue
-                PORT_S = port; print(f"I USED {PORT_S} AS S PORT", HOST); PORT_S_FLAG = True; break
-            else: return "Failed to find free S port"
-    except: raise Exception("how"); return "Unknown reason"
+    if not PORT_R_FLAG:
+        for port in PORTS_R:
+            if CheckSocket(HOST, port):
+                print(res, f"R PORT {port} IS BUSY")
+                continue
+            sk = socket.socket()
+            sk.bind((HOST, port))
+            sk.settimeout(0.1)
+            SOCKET_R = sk; PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT", HOST); PORT_R_FLAG = True; break         
+        else: return "Failed to find free R port"
+    if not PORT_S_FLAG:
+        for port in PORTS_S:
+            try: SOCKET_S.bind((HOST, port))
+            except: continue
+            PORT_S = port; print(f"I USED {PORT_S} AS S PORT", HOST); PORT_S_FLAG = True; break
+        else: return "Failed to find free S port"
     return ""
-
-#print("I AM USING", PORT_R, "AS R AND", PORT_S, "AS S")
 
 def EstConnection(is_opening):
     global SOCKET_R
@@ -74,22 +83,23 @@ def EstConnection(is_opening):
     global IP_TO_CONNECT
     if is_opening:
         try:
-            SOCKET_R.settimeout(3)
+            SOCKET_R.settimeout(4)
+            print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
     else:
-        try:
-            port_to_connect = PORTS_R[PORT_R == PORTS_R[0]]
-            SOCKET_S.settimeout(1)
-            for port in PORTS_R:
-                if PORT_R == port: continue
-                try: SOCKET_S.connect((IP_TO_CONNECT, port))
-                except: continue
-                print(PORT_R, port)
-                break
-            else: return "No avalible games"
-        except: return "Failed to connect to player"
+        SOCKET_S.settimeout(1)
+        for port in PORTS_R:
+            if HOST == IP_TO_CONNECT and PORT_R == port:
+                continue
+            if random.randint(0, 1000) % 100 == 0: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
+            #SOCKET_S.connect((IP_TO_CONNECT, port))
+            try: SOCKET_S.connect((IP_TO_CONNECT, port))
+            except: continue
+            print("I CONNECTED TO", PORT_R, port)
+            break
+        else: return "No avalible games"
     return ""
 
 IS_OPENING_GAME = None
@@ -108,6 +118,8 @@ def Connect():
     
     res += EstConnection(IS_OPENING_GAME)
     if res:
+        #globals()['SOCKET_R'].close()
+        #globals()['PORT_R_FLAG'] = False
         #print(res)
         return
     
