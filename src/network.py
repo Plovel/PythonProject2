@@ -36,6 +36,7 @@ def ExitMultiplayer(txt, menu="MAIN"):
     if not menu is None: SetMenu(menu)
 
 def CheckSocket(host, port):
+    return False
     #global SOCKET_S, PORT_S_FLAG
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     res = True
