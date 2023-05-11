@@ -72,4 +72,4 @@
   - Rework network mechanics
 
 ## Collaborators
-  [Pavel Sidletskiy](t.me/vendor_vachupa)
+  [Pavel Sidletskiy](https://t.me/vendor_vachupa)
