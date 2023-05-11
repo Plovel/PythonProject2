@@ -104,7 +104,7 @@ time_out_to_recieve = 10
 def Connect():
     global STATE, PLAYER_COLOR, CUR_COLOR
     cur_timer = time.time() - timer_for_opening
-    if time_out_to_recieve <= cur_timer: ExitMultiplayer(("No avalible games", "No one connected")[IS_OPENING_GAME], menu="SESSIONS"); return
+    if time_out_to_recieve <= cur_timer: ExitMultiplayer(("No avalible games", "No one connected")[IS_OPENING_GAME], menu=None); return
     BUTTONS[1].text = str(round(time_out_to_recieve - cur_timer))
     BUTTONS[1].draw()
     pygame.display.flip()
@@ -125,9 +125,9 @@ def Connect():
         SOCKET_S.send((STATE + PLAYER_COLOR + CUR_COLOR).encode())
     else:
         try:
-            SOCKET_S.settimeout(3)
+            SOCKET_R.settimeout(0.5)
             data = SOCKET_R.recv(100).decode()
-        except: ExitMultiplayer("Player app did not\nsend session data", menu=None); return
+        except: ExitMultiplayer("Remote app did not\nsend session data", menu="SESSIONS"); return
         STATE = data[:64]
         PLAYER_COLOR = data[64]
         ChangePlayerColor()

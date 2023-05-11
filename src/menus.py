@@ -13,7 +13,7 @@ def SetExitingGameMenu():
 def SetMainMenu():
     globals()['SESSIONS_PAGE'] = 0
     ClearScreen()
-    SetSelectMenu(({"txt":"CheckersOS...", "txt_col":RED, "col":DEFAULT_CLEAR_SCREEN[:], "cor_col":DEFAULT_CLEAR_SCREEN[:], "mode":"BASIC"},
+    SetSelectMenu(({"txt":"CheckersOS", "txt_col":BLACK_GREEN, "col":DEFAULT_CLEAR_SCREEN[:], "cor_col":DEFAULT_CLEAR_SCREEN[:], "mode":"BASIC"},
                    {"txt":"Play", "act":"SHOW_SESSIONS"},
                    {"txt":"Settings", "act":"SETTINGS", "col":WHITE[:], "txt_col":ORANGE[:]},
                    {"txt":"Exit" + "+Rebuild+Relaunch" * REBUILD_AND_RUN_ON_EXITING, "act":"EXIT_APP", "col":RED[:], "txt_col":BLACK[:]}))
@@ -57,7 +57,8 @@ COMMAND_TO_EXECUTE = "echo ahaha"
 changing_variable = "WHITE_CHECKER"
 def ShowTestMenu():
     ClearScreen()
-    SetSelectMenu(({"txt":"Change " + changing_variable, "act":"SET_MENU INPUT " + changing_variable, "col":WHITE, "txt_col":RED},
+    SetSelectMenu(({"txt":"A button to press", "col":ORANGE, "txt_col":BLACK_GREEN},
+                   {"txt":"Change " + changing_variable, "act":"SET_MENU INPUT " + changing_variable, "col":WHITE, "txt_col":RED},
                    {"txt":"Enter changing variable", "act":"SET_MENU INPUT changing_variable", "col":WHITE, "txt_col":RED},
                    {"txt":"Ahah execute command...", "act":"SET_MENU INPUT COMMAND_TO_EXECUTE", "col":RED, "txt_col":BLACK},
                    {"txt":"Back to main menu", "act":"SET_MENU MAIN", "col":GREEN, "txt_col":WHITE},))
@@ -100,7 +101,7 @@ def VarToButtonArgs(ind):
     elif AVALIBLE_CONFIG_INFO[ind][0] == "NUMBER": return {"txt":str(CONFIG[AVALIBLE_CONFIG_NAMES[ind]]), "mode":"BASIC", "col":BLACK[:], "cor_col":WHITE[:], "txt_col":WHITE[:]}
     elif AVALIBLE_CONFIG_INFO[ind][0] == "FLAG":
         flag = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
-        return {"txt":("NO", "YES")[flag], "txt_col":WHITE, "col":(RED, GREEN)[flag]}
+        return {"txt":("NO", "YES")[flag], "txt_col":WHITE, "col":(RED, GREEN)[flag], "mode":"BASIC"}
 
 def SetConfigMenu(ind):
     ClearScreen()
