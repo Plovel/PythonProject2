@@ -27,6 +27,7 @@ def ShowSettings():
 
 def ChangeGameMode():
     global GAME_MODE
+    if GAME_MODE == "MULTIPLAYER": ShowText("Unable to change mode"); return
     message = 'Game mode was changed to\n'
     if GAME_MODE == "BOT":
         GAME_MODE = "BOT_VS_BOT"
@@ -50,7 +51,7 @@ def ShowPlayerWaiting(is_opening):
     IS_OPENING_GAME = is_opening
     timer_for_opening = time.time()
     if is_opening: DrawField()
-    SetSelectMenu(({"txt":"Waiting for player", "col":BLUE, "cor_col":GREEN , "mode":"BASIC"}, {"txt":"???", "col":BLUE, "cor_col":RED, "mode":"BASIC"}), SPACE=10, COVERAGE=(20, 60))
+    SetSelectMenu(({"txt":["Trying to connect", "Waiting for player"][is_opening], "col":BLUE, "cor_col":GREEN , "mode":"BASIC"}, {"txt":"???", "col":BLUE, "cor_col":RED, "mode":"BASIC"}), SPACE=10, COVERAGE=(20, 60))
 
 COMMAND_TO_EXECUTE = "echo ahaha"
 changing_variable = "WHITE_CHECKER"

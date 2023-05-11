@@ -31,7 +31,7 @@ def Disconnect(send=True):
 
 def ExitMultiplayer(txt, menu="MAIN"):
     Disconnect(True)
-    if txt: ShowText(txt)
+    if txt: ShowText(txt, txt_col=ORANGE)
     if not menu is None: SetMenu(menu)
 
 def SetUpSockets():
@@ -49,7 +49,7 @@ def SetUpSockets():
                 try:
                     sk = socket.socket()
                     sk.bind((HOST, port))
-                    sk.settimeout(1)
+                    sk.settimeout(0.1)
                     res = 1 #sk.connect_ex((IP_TO_CONNECT, port))
                     if res == 0:
                         print(res, f"R PORT {port} IS BUSY")
@@ -74,7 +74,7 @@ def EstConnection(is_opening):
     global IP_TO_CONNECT
     if is_opening:
         try:
-            SOCKET_R.settimeout(10)
+            SOCKET_R.settimeout(3)
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
