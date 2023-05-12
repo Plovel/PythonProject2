@@ -2,10 +2,8 @@
 GAME_MODE = "BOT"
 
 STATE = []
-
 PLAYER_COLOR = 'W'
 CUR_COLOR = 'W'
-REVERSED_ORIENTATION = False
 #game_info
 
 #menu_stuffs
@@ -14,9 +12,9 @@ BUTTONS = []
 KEYS_TO_NUMBERS = {pygame.K_1:1, pygame.K_2:2, pygame.K_3:3, pygame.K_4:4}
 #menu_stuffs
 
-#config
+#devconfig
 REBUILD_AND_RUN_ON_EXITING = False
-#config
+#devconfig
 
 def RUN_COMMAND(command):
     print("executed " + command)

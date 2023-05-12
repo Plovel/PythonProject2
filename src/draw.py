@@ -1,3 +1,5 @@
+REVERSED_ORIENTATION = False
+
 def DrawCell(ind, col=None, sz=CELL_SIZE, offset=(0, 0)):
     if col is None:
         if (ind // 8 + ind % 8) % 2: col = BLACK_CELL

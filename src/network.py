@@ -147,7 +147,6 @@ def OtherPlayerHandler():
     if random.randint(1, 10000) % 10 == 0:
         try: SOCKET_S.settimeout(0.01); SOCKET_S.send("CHECK ".encode())
         except: ExitMultiplayer("Bad connection to player"); return
-        #print("I requested check")
         globals()["is_check_req"] = True
         globals()["req_time"] = time.time()
     #checking connection

@@ -1,5 +1,5 @@
 #init
-if LOAD_SESSIONS_ON_STARTUP: print("IRFF"); ReadFromFile()
+if LOAD_SESSIONS_ON_STARTUP: ReadFromFile()
 
 events = pygame.event.get()
 SetConfig(CONFIG)
