@@ -86,6 +86,7 @@ def EstConnection(is_opening):
     global SOCKET_R
     global SOCKET_S
     global IP_TO_CONNECT
+    DebOut = True
     if is_opening:
         try:
             SOCKET_R.settimeout(2)
