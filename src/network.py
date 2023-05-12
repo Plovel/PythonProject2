@@ -6,8 +6,12 @@ import time
 HOST = ""
 IP_TO_CONNECT = "127.0.0.1"
 
-PORTS_R = (2000, 2001)
-PORTS_S = (3000, 3001)
+SOCKET_CHECK_REQ = False
+PORTS_R = (2000,)
+PORTS_S = (3000,)
+if SOCKET_CHECK_REQ:
+    PORTS_R = (2000, 2001)
+    PORTS_S = (3000, 3001)
 if 0: PORTS_R, PORTS_S = PORTS_R[::-1], PORTS_S[::-1]
 RESERVED_PORT = 8237
 
@@ -35,7 +39,6 @@ def ExitMultiplayer(txt, menu="MAIN"):
     if txt: ShowText(txt, txt_col=ORANGE)
     if not menu is None: SetMenu(menu)
 
-SOCKET_CHECK_REQ = False
 def CheckSocket(host, port):
     if not SOCKET_CHECK_REQ: return False
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -63,7 +66,8 @@ def SetUpSockets():
                 if DebOut: print(res, f"R PORT {port} IS BUSY")
                 continue
             SOCKET_R.bind((HOST, port))
-            PORT_R = port; SOCKET_R.listen(1)
+            PORT_R = port
+            SOCKET_R.listen(1)
             if DebOut: print(f"I USED {PORT_R} AS R PORT", HOST)
             PORT_R_FLAG = True
             break         
@@ -71,7 +75,6 @@ def SetUpSockets():
     if not PORT_S_FLAG:
         SOCKET_S.close()
         SOCKET_S = socket.socket()
-        SOCKET_S.settimeout(0.1)
         for port in PORTS_S:
             try: SOCKET_S.bind((HOST, port))
             except: continue
@@ -89,15 +92,15 @@ def EstConnection(is_opening):
     DebOut = True
     if is_opening:
         try:
-            SOCKET_R.settimeout(2)
+            SOCKET_R.settimeout(1)
             if DebOut: print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
     else:
         for port in PORTS_R:
-            SOCKET_R.settimeout(0.5)
-            if PORT_R == port: continue
+            SOCKET_R.settimeout(0.2)
+            if SOCKET_CHECK_REQ and PORT_R == port: continue
             if DebOut and random.randint(0, 1000) % 50 == 0:
                 if DebOut: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
             try: SOCKET_S.connect((IP_TO_CONNECT, port))
