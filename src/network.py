@@ -30,9 +30,9 @@ def Disconnect(send=True):
         except: pass
     globals()["IS_CONNECTED"] = False
     globals()["GAME_MODE"] = "BOT"
-    SOCKET_R.close()
-    SOCKET_S.close()
-    PORT_R_FLAG, PORT_S_FLAG = False, False
+    #SOCKET_R.close()
+    #SOCKET_S.close()
+    #PORT_R_FLAG, PORT_S_FLAG = False, False
 
 def ExitMultiplayer(txt, menu="MAIN"):
     Disconnect(True)
@@ -158,7 +158,7 @@ def Connect():
 
 is_check_req = False
 req_time = time.time()
-req_timeout = 1
+req_timeout = 10
 def OtherPlayerHandler():
     #checking connection
     if is_check_req and time.time() - req_time > req_timeout:
