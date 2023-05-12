@@ -42,7 +42,7 @@ def CheckSocket(host, port):
     res = True
     for i in range(10):
         skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("CHECKING", (host, port), skt.connect_ex((host, port)) == 0)
+        if DebOut: print("CHECKING", (host, port), skt.connect_ex((host, port)) == 0)
         skt.close()
     try: sock.connect((host, port))
     except: sock.close(); res = False
@@ -60,7 +60,7 @@ def SetUpSockets():
         SOCKET_R.settimeout(0.1)
         for port in PORTS_R:
             if CheckSocket(HOST, port):
-                print(res, f"R PORT {port} IS BUSY")
+                if DebOut: print(res, f"R PORT {port} IS BUSY")
                 continue
             SOCKET_R.bind((HOST, port))
             PORT_R = port; SOCKET_R.listen(1)
@@ -89,7 +89,7 @@ def EstConnection(is_opening):
     if is_opening:
         try:
             SOCKET_R.settimeout(0.5)
-            print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
+            if DebOut: print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
@@ -97,10 +97,10 @@ def EstConnection(is_opening):
         for port in PORTS_R:
             if PORT_R == port: continue
             if DebOut and random.randint(0, 1000) % 50 == 0:
-                print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
+                if DebOut: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
             try: SOCKET_S.connect((IP_TO_CONNECT, port))
             except: continue
-            print("I CONNECTED TO", PORT_R, port)
+            if DebOut: print("I CONNECTED TO", PORT_R, port)
             break
         else: return "No avalible games"
     return ""
