@@ -172,19 +172,22 @@ def OtherPlayerHandler():
         globals()["req_time"] = time.time()
     #checking connection
 
-    SOCKET_S.settimeout(0.05)
-    try: SOCKET_R.settimeout(0.2)
+    #SOCKET_S.settimeout(0.05)
+    try: SOCKET_R.settimeout(0.1)
     except: ExitMultiplayer("Recieve socket does not work"); return
     messages = ''
     try: messages += SOCKET_R.recv(1024).decode()
     except:
-        ExitMultiplayer("Recieve socket doesnt work\nor timeout")
+        #ExitMultiplayer("Recieve socket doesnt work\nor timeout")
         return
     messages = messages.split()
     for message in messages:
-        if message == "DISCONNECT": ExitMultiplayer("Other player exited game"); return
+        if message == "DISCONNECT":
+            ExitMultiplayer("Other player exited game")
+            return
         elif message.startswith("MOVE"): Move(int(message[5:]))
-        elif message.startswith("SELECT"): SelectChecker(int(message[7:]), show=False)
+        elif message.startswith("SELECT"):
+            SelectChecker(int(message[7:]), show=False)
         elif message == ("CHECK"):
             try: SOCKET_S.send("OK ".encode())
             except: ExitMultiplayer("Unknown socket error", menu="SESSIONS")
