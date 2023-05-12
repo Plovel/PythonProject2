@@ -33,7 +33,7 @@ pip install requirentments.txt
 ./run.sh
 ```
 
-If you are using Ubuntu(or other ubuntu-type system), unstall the game, using next command sequence:
+If you are using Ubuntu(or other ubuntu-type system), install the game, using next command sequence:
 
 ```
 git clone --branch dev git@github.com:Plovel/PythonProject2.git CheckersGame

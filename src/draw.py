@@ -11,8 +11,9 @@ def draw_cool_circle(color, center, radius):
         gfxdraw.aacircle(screen, *center, radius, color)
         gfxdraw.filled_circle(screen, *center, radius, color)
         if False:
-            gfxdraw.aacircle(screen, *center, radius, KING_CROWN_COLOR)
-            gfxdraw.aacircle(screen, *center, radius * 80 // 100, KING_CROWN_COLOR)
+            clr = WHITE
+            gfxdraw.aacircle(screen, *center, radius, clr)
+            gfxdraw.aacircle(screen, *center, radius * 80 // 100, clr)
     else:
         pygame.draw.circle(screen, color, center, radius); return
     #gfxdraw.circle(screen, *center, radius, color); #return
