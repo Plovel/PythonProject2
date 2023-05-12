@@ -1,9 +1,11 @@
 import os
 import shutil
 
+WD = os.path.dirname(__file__) + '/' #Work Directory
+
 PROJECT_NAME = "game.py"
-PATH_FOR_OUTPUT = "build/"
-PATH_TO_SRC = "src/"
+PATH_FOR_OUTPUT = WD + "../build/"
+PATH_TO_SRC = WD + "../src/"
 FILES_SEQUENCE = ["constants",
                   "pygame_init",
                   "global_zone",

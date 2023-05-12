@@ -5,16 +5,19 @@ def NormalSizeOfButton(txt_fnt, txt_sz, txt):
 def NormalSizeOfButtons(buttons):
     ans = [0, 0]
     for button in buttons:
-        button_size = NormalSizeOfButton(button.get("txt_fnt", def_kwargs["txt_fnt"]),
-                                         button.get("txt_sz", def_kwargs["txt_sz"]),
-                                         button.get("txt", "DEFAULT_TEXT"))
-        ans[0] = max(buttons_max_sizes[0], button_size[0])
-        ans[1] = max(buttons_max_sizes[1], button_size[1])
+        sz = NormalSizeOfButton(button.get("txt_fnt", def_kwargs["txt_fnt"]),
+                                button.get("txt_sz", def_kwargs["txt_sz"]),
+                                button.get("txt", "DEFAULT_TEXT"))
+        ans[0] = max(buttons_max_sizes[0], sz[0])
+        ans[1] = max(buttons_max_sizes[1], sz[1])
     return ans
 
 class Button:
 
-    def __init__(self, pnt=None, sz=(None, None), act="NONE", col=None, cor_col=None, pressed_col=None, c_sz=None, txt="DEFAULT_TEXT", txt_col=WHITE[:], txt_fnt=DEFAULT_FONT, txt_sz=None, mode="BASIC", center=None):
+    def __init__(self, pnt=None, sz=(None, None), act="NONE", col=None,
+                 cor_col=None, pressed_col=None, c_sz=None, txt="DEFAULT_TEXT",
+                 txt_col=WHITE[:], txt_fnt=DEFAULT_FONT, txt_sz=None,
+                 mode="BASIC", center=None):
         if col is None:
             if mode == "BASIC": col = TRANSPARENT[:]
             elif mode == "SELECT": col = GREEN[:]
@@ -26,14 +29,14 @@ class Button:
             elif mode == "SELECT": pressed_col = BLUE[:]
 
         if txt_sz is None and sz == (None, None): txt_sz = DEFAULT_FONT_SIZE
-        if not (txt_sz is None) and (sz == (None, None)): sz = NormalSizeOfButton(txt_fnt, txt_sz, txt)
+        if not (txt_sz is None) and (sz == (None, None)):
+            sz = NormalSizeOfButton(txt_fnt, txt_sz, txt)
         if not txt_sz is None and ((sz[0] is None) or (sz[1] is None)):
             normal_size = NormalSizeOfButton(txt_fnt, txt_sz, txt)
             if sz[0] is None: sz = (normal_size[0], sz[1])
             if sz[1] is None: sz = (sz[0], normal_size[1])
         if txt_sz is None:
-            #todo?
-            #if not (sz[])
+            #todo
             txt_sz = DEFAULT_FONT_SIZE
             normal_size = NormalSizeOfButton(txt_fnt, txt_sz, txt)
             if sz[0] is None: sz = (normal_size[0], sz[1])
@@ -45,8 +48,10 @@ class Button:
             if mode == "BASIC": c_sz = 5
             elif mode == "SELECT": c_sz = 5
 
-        if (pnt is None) and (center is None): center = (HEIGHT // 2, WIDTH // 2)
-        if not (center is None): pnt = (center[0] - sz[0] // 2, center[1] - sz[1] // 2)
+        if (pnt is None) and (center is None):
+            center = (HEIGHT // 2, WIDTH // 2)
+        if not (center is None):
+            pnt = (center[0] - sz[0] // 2, center[1] - sz[1] // 2)
 
         self.mode=mode
         self.point = pnt[:]
@@ -65,11 +70,14 @@ class Button:
         self.pressed = False
 
     def GetCenter(self):
-        return (self.point[0] + self.size[0] // 2, self.point[1] + self.size[1] // 2)
+        return (self.point[0] + self.size[0] // 2,
+                self.point[1] + self.size[1] // 2)
 
     def draw(self):
         if self.corner_color != TRANSPARENT:
-            pygame.draw.rect(screen, self.corner_color, (self.point[1], self.point[0], self.size[1], self.size[0]))
+            pygame.draw.rect(screen, self.corner_color,
+                             (self.point[1], self.point[0],
+                              self.size[1], self.size[0]))
         if self.color != TRANSPARENT:
             pygame.draw.rect(screen,
                              self.color,
@@ -80,16 +88,25 @@ class Button:
                               )
                              )
         if self.text_color != TRANSPARENT:
-            img = pygame.font.SysFont(self.text_font, self.text_size).render(self.text, True, self.text_color)
+            font = pygame.font.SysFont(self.text_font, self.text_size)
+            img = font.render(self.text, True, self.text_color)
             center = self.GetCenter()
             rect = img.get_rect()
             rect.center = (center[1], center[0])
             screen.blit(img, rect.topleft)
 
     def check_mouse(self, pos):
-        is_on_button = (self.point[0] <= pos[0] <= self.point[0] + self.size[0]) and (self.point[1] <= pos[1] <= self.point[1] + self.size[1])
-        if self.pressed and not is_on_button: self.pressed = False; pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
-        expected_color = (self.unselected_color[:], [[self.color[:], self.corner_color[:]][self.mode == "SELECT"], self.pressed_color[:]][self.pressed])[is_on_button]
+        is_on_button = (True and
+        (self.point[0] <= pos[0] <= self.point[0] + self.size[0]) and
+        (self.point[1] <= pos[1] <= self.point[1] + self.size[1]))
+        if self.pressed and not is_on_button:
+            self.pressed = False
+            pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
+        expected_color = self.unselected_color
+        if self.pressed: expected_color = self.pressed_color
+        elif is_on_button:
+            if self.mode == "SELECT": expected_color = self.corner_color
+            elif self.mode == "BASIC": expected_color = self.color
         if expected_color != self.color:
             self.color = expected_color
             self.draw()

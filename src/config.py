@@ -1,3 +1,5 @@
+PATH_TO_CONFIG = "config.txt"
+
 DEFAULT_CONFIG = {'WHITE_CELL': (255, 255, 255),
                   'BLACK_CELL': (128, 128, 128),
                   'HIGHLIGHTED_CELL': (0, 255, 0),
@@ -40,24 +42,24 @@ AVALIBLE_CONFIG_NAMES = ("WHITE_CELL",
                          "READ_CONFIG_ON_STARTUP",
                          "SAVE_CONFIG_ON_EXIT")
 
-AVALIBLE_CONFIG_INFO = (("COLORS",),
-                        ("COLORS",),
-                        ("COLORS",),
-                        ("COLORS",),
-                        ("COLORS",),
-                        ("COLORS",),
-                        ("COLORS",),
+AVALIBLE_CONFIG_INFO = (("COLORS", "White cell color"),
+                        ("COLORS", "Black cell color"),
+                        ("COLORS", "Avalible cell color"),
+                        ("COLORS", "Selected cell color"),
+                        ("COLORS", "White checker color"),
+                        ("COLORS", "Black checker color"),
+                        ("COLORS", "Crown color"),
                         
-                        ("NUMBER",),
-                        ("NUMBER",),
-                        ("NUMBER",),
-                        ("NUMBER",),
+                        ("NUMBER", "Checker size"),
+                        ("NUMBER", "Checker crown size"),
+                        ("NUMBER", "Selected checker size"),
+                        ("NUMBER", "FPS"),
                         
-                        ("FLAG",),
-                        ("FLAG",),
-                        ("FLAG",),
-                        ("FLAG",),
-                        ("FLAG",))
+                        ("FLAG", "Load sessions when opening"),
+                        ("FLAG", "Save sessions when closing"),
+                        ("FLAG", "Delete session after game ending"),
+                        ("FLAG", "Read config when opening"),
+                        ("FLAG", "Save config when closing"))
 
 CONFIG = {}
 
@@ -76,8 +78,8 @@ def SetConfig(config, bkp_req=True):
     return True
 
 def ReadConfigFromFile():
-    if not os.path.isfile(WORKING_DIR + PATH_TO_CONFIG): return "File not found"
-    with open(WORKING_DIR + PATH_TO_CONFIG, 'r', encoding="utf-8") as file:
+    if not os.path.isfile(WD + PATH_TO_CONFIG): return "File not found"
+    with open(WD + PATH_TO_CONFIG, 'r', encoding="utf-8") as file:
         config = {}
         try: config |= eval(file.read().strip())
         except: return "Invalid config format"
@@ -86,8 +88,9 @@ def ReadConfigFromFile():
 
 def WriteConfigToFile():
     try:
-        with open(WORKING_DIR + PATH_TO_CONFIG, 'w', encoding="utf-8") as file: print(CONFIG, file=file)
-    except: return "Something went wrong idk"
+        with open(WD + PATH_TO_CONFIG, 'w', encoding="utf-8") as file:
+            print(CONFIG, file=file)
+    except: return "Failed to save config"
     return ""
 
 def SetDefaultConfig(): SetConfig(DEFAULT_CONFIG)

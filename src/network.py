@@ -63,7 +63,10 @@ def SetUpSockets():
                 print(res, f"R PORT {port} IS BUSY")
                 continue
             SOCKET_R.bind((HOST, port))
-            PORT_R = port; SOCKET_R.listen(1); print(f"I USED {PORT_R} AS R PORT", HOST); PORT_R_FLAG = True; break         
+            PORT_R = port; SOCKET_R.listen(1)
+            if DebOut: print(f"I USED {PORT_R} AS R PORT", HOST)
+            PORT_R_FLAG = True
+            break         
         else: return "Failed to find free R port"
     if not PORT_S_FLAG:
         SOCKET_S.close()
@@ -72,7 +75,10 @@ def SetUpSockets():
         for port in PORTS_S:
             try: SOCKET_S.bind((HOST, port))
             except: continue
-            PORT_S = port; print(f"I USED {PORT_S} AS S PORT", HOST); PORT_S_FLAG = True; break
+            PORT_S = port
+            if DebOut: print(f"I USED {PORT_S} AS S PORT", HOST)
+            PORT_S_FLAG = True
+            break
         else: return "Failed to find free S port"
     return ""
 
@@ -90,7 +96,8 @@ def EstConnection(is_opening):
     else:
         for port in PORTS_R:
             if PORT_R == port: continue
-            if random.randint(0, 1000) % 50 == 0: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
+            if DebOut and random.randint(0, 1000) % 50 == 0:
+                print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
             try: SOCKET_S.connect((IP_TO_CONNECT, port))
             except: continue
             print("I CONNECTED TO", PORT_R, port)
@@ -104,13 +111,19 @@ time_out_to_recieve = 10
 def Connect():
     global STATE, PLAYER_COLOR, CUR_COLOR
     cur_timer = time.time() - timer_for_opening
-    if time_out_to_recieve <= cur_timer: ExitMultiplayer(("No avalible games", "No one connected")[IS_OPENING_GAME], menu=["SESSIONS", "SESSIONS"][IS_OPENING_GAME]); return
+    if time_out_to_recieve <= cur_timer:
+        message = ("No avalible games", "No one connected")[IS_OPENING_GAME]
+        menu = ["SESSIONS", "SESSIONS"][IS_OPENING_GAME]
+        ExitMultiplayer(message, menu=menu)
+        return
     BUTTONS[1].text = str(round(time_out_to_recieve - cur_timer))
     BUTTONS[1].draw()
     pygame.display.flip()
     
     res = SetUpSockets()
-    if res: ExitMultiplayer("Failed to open ports\nReason: " + res, menu=None); return
+    if res:
+        ExitMultiplayer("Failed to open ports\nReason: " + res, menu=None)
+        return
     
     res += EstConnection(IS_OPENING_GAME)
     if res: return
@@ -118,7 +131,7 @@ def Connect():
     res += EstConnection(not IS_OPENING_GAME)
     if res: return
     
-    print("Connection Established")
+    if DebOut: print("Connection Established")
     globals()["IS_CONNECTED"] = True
     
     if IS_OPENING_GAME:
@@ -127,7 +140,10 @@ def Connect():
         try:
             SOCKET_R.settimeout(0.5)
             data = SOCKET_R.recv(100).decode()
-        except: ExitMultiplayer("Remote app did not\nsend session data", menu="SESSIONS"); return
+        except:
+            ExitMultiplayer("Remote app did not\nsend session data",
+                            menu="SESSIONS")
+            return
         STATE = data[:64]
         PLAYER_COLOR = data[64]
         ChangePlayerColor()
@@ -141,7 +157,7 @@ req_timeout = 1
 def OtherPlayerHandler():
     #checking connection
     if is_check_req and time.time() - req_time > req_timeout:
-        print("CONNECTION CHECK FAILED")
+        if DebOut: print("CONNECTION CHECK FAILED")
         globals()["is_check_req"] = False
         ExitMultiplayer("Player app did not response"); return
     if random.randint(1, 10000) % 10 == 0:
@@ -152,19 +168,19 @@ def OtherPlayerHandler():
     #checking connection
     
     try: SOCKET_R.settimeout(0.1)
-    except: ExitMultiplayer("Recieve socket doesnt work"); return
+    except: ExitMultiplayer("Recieve socket does not work"); return
     messages = ''
     try: messages += SOCKET_R.recv(1024).decode()
-    except: pass #ExitMultiplayer("Recieve socket doesnt work\nor timeout"); return
+    except:
+        ExitMultiplayer("Recieve socket doesnt work\nor timeout")
+        return
     messages = messages.split()
-    #print(messages)
     for message in messages:
         if message == "DISCONNECT": ExitMultiplayer("Other player exited game"); return
         elif message.startswith("MOVE"): Move(int(message[5:]))
         elif message.startswith("SELECT"): SelectChecker(int(message[7:]), show=False)
         elif message == ("CHECK"):
             try: SOCKET_S.send("OK ".encode())
-            except: print("wtf")
-            #print("I SENT IM CONNECTED")
+            except: ExitMultiplayer("Unknown socket error", menu="SESSIONS")
         elif message == ("OK"): globals()["is_check_req"] = False
 

@@ -3,9 +3,6 @@ CELL_SIZE = 80
 WIDTH = CELL_SIZE * 8
 HEIGHT = CELL_SIZE * 8
 
-PATH_TO_SESSIONS_FILE = "checkers_sessions.txt"
-PATH_TO_MEDIA = "media/"
-PATH_TO_CONFIG = "config.txt"
 PATH_TO_SRC = "../src"
 #common constansts
 

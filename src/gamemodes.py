@@ -29,7 +29,8 @@ HARD_BOT = False
 def RobotMove():
     time.sleep(0.2 * (GAME_MODE != "BOT_VS_BOT"))
     if not IS_SELECT_LOCKED:
-        time.sleep(len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) * 0.1 * (GAME_MODE != "BOT_VS_BOT"))
+        time.sleep(len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) * 0.1 *
+                   (GAME_MODE != "BOT_VS_BOT"))
         if HARD_BOT and not (random.randint(0, 1000) % 20 == 0):
             state_bkp = [STATE[:], PLAYER_COLOR, CUR_COLOR]
             #for checker in AVALIBLE_CHECKERS[CUR_COLOR == 'B']: 

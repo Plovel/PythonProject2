@@ -54,7 +54,7 @@ def EmulateButtonPressSound():
 def PressButton(button):
     global PLAYER_COLOR
     action = button.action
-    #print("ACTIVATED BUTTON", button.text)
+    if DebOut: print("ACTIVATED BUTTON", button.text)
     if action == "NONE": return
     if action.startswith("PLAY"): RunSession(int(action[5:]))
     elif action.startswith("SET_MENU"): SetMenu(action[9:])
@@ -66,7 +66,9 @@ def PressButton(button):
         except: ShowText("Trash value..."); return;
         if var == "COMMAND_TO_EXECUTE":
             globals()[var] = val
-            if not RUN_COMMAND(COMMAND_TO_EXECUTE): ShowText("Ahahaahahahh something\nbad happened....", **{"col":RED, "txt_col":BLUE})
+            if not RUN_COMMAND(COMMAND_TO_EXECUTE):
+                ShowText("Something\nbad happened....",
+                         **{"col":RED, "txt_col":BLUE})
         else:
             try: SetConfig({var:val})
             except: ShowText("Something went wrong")
@@ -97,10 +99,18 @@ def InputHandler(event):
     if event.key == pygame.K_BACKSPACE:
         if left: EmulateButtonPressSound(); left = left[:-1]
     elif event.key == pygame.K_LEFT:
-        if left: EmulateButtonPressSound(); right = left[-1] + right; left = left[:-1]
+        if left:
+            EmulateButtonPressSound()
+            right = left[-1] + right
+            left = left[:-1]
     elif event.key == pygame.K_RIGHT:
-        if right: EmulateButtonPressSound(); left += right[0]; right = right[1:]
-    elif char != '|' and char.isascii(): EmulateButtonPressSound(); left += char
+        if right:
+            EmulateButtonPressSound()
+            left += right[0]
+            right = right[1:]
+    elif char != '|' and char.isascii():
+        EmulateButtonPressSound()
+        left += char
     BUTTONS[1].text = left + '|' + right
     BUTTONS[1].draw()
     pygame.display.flip()
@@ -112,23 +122,28 @@ def GameHandler(event):
             RunGameTurn()
 
     elif event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE: SetMenu("EXITING_GAME") #
-        elif event.key == pygame.K_g: ChangeGameMode() #
-        elif event.key == pygame.K_r: ReverseOrientation(True); ShowText("Orientation was changed") #
-        elif event.key == pygame.K_s: #
+        if event.key == pygame.K_ESCAPE: SetMenu("EXITING_GAME")
+        elif event.key == pygame.K_g: ChangeGameMode()
+        elif event.key == pygame.K_r:
+            ReverseOrientation(True)
+            ShowText("Orientation was changed")
+        elif event.key == pygame.K_s:
             global SESSION_IND
             SaveSession(SESSION_IND)
             if SESSION_IND == -1: SESSION_IND = len(SESSIONS) - 1
             ShowText("Session Saved", timer=0.3)
-        elif event.key == pygame.K_x: ShowAvalibleButtons("GAME") #
+        elif event.key == pygame.K_x: ShowAvalibleButtons("GAME")
         elif event.key == pygame.K_q:
             if GAME_MODE == "MULTIPLAYER": Disconnect()
-            SetMenu("SESSIONS") #
-        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True") #
-        elif event.key == pygame.K_c: SaveGameAsNewSession(); ShowText("Game saved into new session") #
+            SetMenu("SESSIONS")
+        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True")
+        elif event.key == pygame.K_c:
+            SaveGameAsNewSession()
+            ShowText("Game saved into new session")
             
 
-MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))
+MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP,
+                                   pygame.MOUSEMOTION))
 def MenuHandler(event):
     global APP_STATE
     menu = APP_STATE[5:]
@@ -166,14 +181,16 @@ def MenuHandler(event):
                 TurnSessionsPage(side='L') #
             elif menu == "CONFIG":
                 EmulateButtonPressSound()
-                SetConfigMenu((AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text) - 1) % len(AVALIBLE_CONFIG_NAMES))
+                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
+                SetConfigMenu((ind - 1) % len(AVALIBLE_CONFIG_NAMES))
         elif event.key == pygame.K_RIGHT:
             if menu == "SESSIONS":
                 EmulateButtonPressSound()
                 TurnSessionsPage(side='R') #
             elif menu == "CONFIG":
                 EmulateButtonPressSound()
-                SetConfigMenu((AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text) + 1) % len(AVALIBLE_CONFIG_NAMES))
+                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
+                SetConfigMenu((ind + 1) % len(AVALIBLE_CONFIG_NAMES))
         elif event.key == pygame.K_DOWN:
             if menu == "CONFIG":
                 ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
@@ -187,41 +204,50 @@ def MenuHandler(event):
                 EmulateButtonPressSound()
                 SetConfigMenu(ind)
         elif event.key == pygame.K_s:
-            if menu == "SESSIONS": #
+            if menu == "SESSIONS":
                 WriteToFile()
                 ShowText("Sessions was saved")
                 SetMenu("SESSIONS")
-            elif menu == "CONFIG": #
+            elif menu == "CONFIG":
                 res = WriteConfigToFile()
                 if not res: ShowText("Config saved")
                 else: ShowText("Failed to save config\nReason: " + res)
         elif event.key == pygame.K_r:
-            if menu == "SESSIONS": #
+            if menu == "SESSIONS":
                 ReadFromFile()
                 ShowText("Sessions was read")
                 SetMenu("SESSIONS")
-            elif menu == "CONFIG": #
+            elif menu == "CONFIG":
                 res = ReadConfigFromFile()
                 if not res: ShowText("Config was read")
                 else: ShowText("Failed to read config\nReason: " + res)
         elif event.key == pygame.K_d:
-            if menu == "CONFIG": SetConfig(DEFAULT_CONFIG); SetMenu("CONFIG"); ShowText("Setted default config")
+            if menu == "CONFIG":
+                SetConfig(DEFAULT_CONFIG)
+                SetMenu("CONFIG")
+                ShowText("Setted default config")
         elif event.key == pygame.K_g:
-            if menu in ("MAIN", "SESSIONS"): ChangeGameMode() #
+            if menu in ("MAIN", "SESSIONS"): ChangeGameMode()
         elif event.key == pygame.K_t:
-            SetMenu("TEST") #
+            SetMenu("TEST")
             ShowText("This menu was created\nfor joy of programming\nIt can brake the game", timer=3)
-        elif event.key == pygame.K_n: #
-            if menu == "SESSIONS": EmulateButtonPressSound(); ResetGame(); SetMenu("SELECTING_COLOR")
+        elif event.key == pygame.K_n:
+            if menu == "SESSIONS":
+                EmulateButtonPressSound()
+                ResetGame()
+                SetMenu("SELECTING_COLOR")
         elif event.key == pygame.K_o:
             if menu == "SESSIONS": SetMenu("WAITING_FOR_PLAYER False")
-        elif event.key == pygame.K_x: ShowAvalibleButtons(menu) #shouldnt be shown in shortcuts
+        elif event.key == pygame.K_x:
+            ShowAvalibleButtons(menu) #shouldnt be shown in shortcuts
         elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP"))
-        elif event.key in KEYS_TO_NUMBERS: #
+        elif event.key in KEYS_TO_NUMBERS:
             if menu == "SESSIONS":
                 session = SESSIONS_PAGE * 4 + KEYS_TO_NUMBERS[event.key] - 1
                 if 0 <= session < len(SESSIONS): RunSession(session)
-                elif session == len(SESSIONS): ResetState(); SetMenu("SELECTING_COLOR")
+                elif session == len(SESSIONS):
+                    ResetState()
+                    SetMenu("SELECTING_COLOR")
         elif event.key == pygame.K_e:
             if menu == "CONFIG":
                 EmulateButtonPressSound()
@@ -299,7 +325,8 @@ def TabNavHandler(event):
         if event.type == pygame.KEYDOWN:
             if CUR_KEY_IND == -1: CUR_KEY_IND = 0; EmulateSelect(CUR_KEY_IND)
             else: EmulateMouseDown(SELECT_INDEXES[CUR_KEY_IND])
-        elif event.type == pygame.KEYUP: EmulateMouseUp(SELECT_INDEXES[CUR_KEY_IND])
+        elif event.type == pygame.KEYUP:
+            EmulateMouseUp(SELECT_INDEXES[CUR_KEY_IND])
 
     pygame.display.update()
 

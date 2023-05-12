@@ -82,13 +82,21 @@ def AvalibleTiles(ind, eating_required=False, forbidden_koef=(0, 0)):
                 if CI(new_i, new_j):
                     new_ind = new_i * 8 + new_j
                     if STATE[new_ind] == ' ':
-                        if (eating_required <= eaten) and (checker.isupper() or (i_koef == simple_move_i_koef)): AVALIBLE_CELLS.add(new_ind)
+                        if ((eating_required <= eaten) and
+                        (checker.isupper() or (i_koef == simple_move_i_koef))):
+                            AVALIBLE_CELLS.add(new_ind)
                     elif STATE[new_ind].upper() != checker.upper():
-                        if CI(new_i + i_koef, new_j + j_koef) and STATE[new_ind + i_koef * 8 + j_koef] == ' ':
+                        if (CI(new_i + i_koef, new_j + j_koef) and
+                        STATE[new_ind + i_koef * 8 + j_koef] == ' '):
                             IS_EATEN = True
                             eaten = True
-                            if eating_required: AVALIBLE_CELLS.add(new_ind + i_koef * 8 + j_koef)
-                            else: AvalibleTiles(ind, eating_required=True, forbidden_koef=forbidden_koef); return
+                            if eating_required:
+                                AVALIBLE_CELLS.add(new_ind +
+                                                   i_koef * 8 + j_koef)
+                            else:
+                                AvalibleTiles(ind, eating_required=True,
+                                              forbidden_koef=forbidden_koef)
+                                return
                         else: break
                     elif STATE[new_ind].upper() == checker.upper(): break
                 else: break
@@ -96,8 +104,12 @@ def AvalibleTiles(ind, eating_required=False, forbidden_koef=(0, 0)):
 def SelectChecker(ind, forbidden_koef=(0, 0), show=True):
     global SELECTED_CHECKER
     if ind == -1: return
-    if IS_SELECT_LOCKED and ind != SELECTED_CHECKER: print("LOCKED, YOU CANT SELECT ANOTHER"); return False
-    if CUR_COLOR != STATE[ind].upper(): print("IT ISNT YOUR COLOR"); return False
+    if IS_SELECT_LOCKED and ind != SELECTED_CHECKER:
+        if DebOut: print("LOCKED, YOU CANT SELECT ANOTHER")
+        return False
+    if CUR_COLOR != STATE[ind].upper():
+        if DebOut: print("IT ISNT YOUR COLOR")
+        return False
 
     PutChecker()
     SELECTED_CHECKER = ind
@@ -106,7 +118,9 @@ def SelectChecker(ind, forbidden_koef=(0, 0), show=True):
         DrawCell(ind, col=SELECTED_CELL)
         DrawChecker(ind, is_selected=True)
     
-    if not ind in AVALIBLE_CHECKERS[CUR_COLOR == 'B']: print("THIS CHECKER CANT MOVE"); return False
+    if not ind in AVALIBLE_CHECKERS[CUR_COLOR == 'B']:
+        if DebOut: print("THIS CHECKER CANT MOVE")
+        return False
 
     AvalibleTiles(ind, forbidden_koef=forbidden_koef)
     if show:
@@ -144,7 +158,9 @@ def ChangeChecker(ind, checker):
 
 def Move(ind):
     global IS_SELECT_LOCKED
-    if not ind in AVALIBLE_CELLS: print("Why did you press here?"); return False
+    if not ind in AVALIBLE_CELLS:
+        if DebOut: print("Why did you press here?")
+        return False
     IS_SELECT_LOCKED = False
 
     pygame.mixer.Sound.play(random.choice(CHESS_SOUNDS))
@@ -170,10 +186,11 @@ def Move(ind):
     UpdateCheckersState()
     
     if was_eaten:
-        SelectChecker(ind, forbidden_koef=(-i_koef, -j_koef), show=(PLAYER_COLOR == CUR_COLOR))
+        SelectChecker(ind, forbidden_koef=(-i_koef, -j_koef),
+                      show=(PLAYER_COLOR == CUR_COLOR))
         if IS_EATEN:
             IS_SELECT_LOCKED = True
-            print("I locked you")
+            if DebOut: print("I locked you")
         else:
             ChangeTurn()
             PutChecker()
