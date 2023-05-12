@@ -20,13 +20,22 @@ def ClickFunc(pos):
 
 def PlayerMove(): ClickFunc(pygame.mouse.get_pos())
 
+def RobotRandomMove():
+    checker = random.choice(tuple(AVALIBLE_CHECKERS[CUR_COLOR == 'B']))
+    SelectChecker(checker, show=False)
+    Move(random.choice(tuple(AVALIBLE_CELLS)))
+
+HARD_BOT = False
 def RobotMove():
     time.sleep(0.2 * (GAME_MODE != "BOT_VS_BOT"))
     if not IS_SELECT_LOCKED:
         time.sleep(len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) * 0.1 * (GAME_MODE != "BOT_VS_BOT"))
-        checker = random.choice(tuple(AVALIBLE_CHECKERS[CUR_COLOR == 'B']))
-        SelectChecker(checker, show=False)
-    Move(random.choice(tuple(AVALIBLE_CELLS)))
+        if HARD_BOT and not (random.randint(0, 1000) % 20 == 0):
+            state_bkp = [STATE[:], PLAYER_COLOR, CUR_COLOR]
+            #for checker in AVALIBLE_CHECKERS[CUR_COLOR == 'B']: 
+        else:
+            RobotRandomMove()
+    else: Move(random.choice(tuple(AVALIBLE_CELLS)))
 
 def CheckWinner():
     if bool(AVALIBLE_CHECKERS[CUR_COLOR == 'B']): return "NONE"
