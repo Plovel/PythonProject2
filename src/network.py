@@ -164,15 +164,16 @@ def OtherPlayerHandler():
     if is_check_req and time.time() - req_time > req_timeout:
         if DebOut: print("CONNECTION CHECK FAILED")
         globals()["is_check_req"] = False
-        ExitMultiplayer("Player app did not response"); return
+        ExitMultiplayer("Players app did not response"); return
     if random.randint(1, 10000) % 10 == 0:
         try: SOCKET_S.settimeout(0.01); SOCKET_S.send("CHECK ".encode())
         except: ExitMultiplayer("Bad connection to player"); return
         globals()["is_check_req"] = True
         globals()["req_time"] = time.time()
     #checking connection
-    
-    try: SOCKET_R.settimeout(0.1)
+
+    SOCKET_S.settimeout(0.05)
+    try: SOCKET_R.settimeout(0.2)
     except: ExitMultiplayer("Recieve socket does not work"); return
     messages = ''
     try: messages += SOCKET_R.recv(1024).decode()
