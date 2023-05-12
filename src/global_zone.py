@@ -6,21 +6,7 @@ STATE = []
 PLAYER_COLOR = 'W'
 CUR_COLOR = 'W'
 REVERSED_ORIENTATION = False
-
-SELECTED_CHECKER = -1
-AVALIBLE_CELLS = set()
-IS_EATEN = False
-IS_SELECT_LOCKED = False
-
-EXISTING_CHECKERS = [set(), set()]
-AVALIBLE_CHECKERS = [set(), set()]
 #game_info
-
-#sessions
-SESSIONS = []
-SESSION_IND = -1
-SESSIONS_PAGE = 0
-#sessions
 
 #menu_stuffs
 APP_STATE = "MENU MAIN"

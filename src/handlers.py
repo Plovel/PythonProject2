@@ -1,6 +1,6 @@
 AVALIBLE_BUTTONS = {"MAIN":"G - Change game mode\nM - Go here from any menu\nT - Dev/Fun Menu",
                     "SESSIONS":"Esc - Go to main menu\nG - Change game mode\nN - New session\nS - Save sessions to file\nR - Read sessions from file\nArrows < > - Change page\n[1, 2, 3, 4] - Select Game\nO - connect to another player",
-                    "GAME":"Esc - Session saving dialog\nG - Change game mode\nR - Rotate field\nS - Save the session\nQ - Exit to sessions (no saving)\nO - accept connection",
+                    "GAME":"Esc - Session saving dialog\nG - Change game mode\nR - Rotate field\nS - Save the session\nN - save game as new session\nQ - Exit to sessions (no saving)\nO - accept connection",
                     "SETTINGS":"Esc - Go to main menu",
                     "EXITING_GAME":"Esc - Back to game",
                     "SELECTING_COLOR":"Esc - Back to sessions",
@@ -89,7 +89,8 @@ def GameHandler(event):
         elif event.key == pygame.K_q:
             if GAME_MODE == "MULTIPLAYER": Disconnect()
             SetMenu("SESSIONS") #
-        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True")
+        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True") #
+        elif event.key == pygame.K_c: SaveGameAsNewSession(); ShowText("Game saved into new session") #
             
 
 MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))

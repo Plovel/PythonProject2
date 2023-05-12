@@ -82,14 +82,14 @@ def EstConnection(is_opening):
     global IP_TO_CONNECT
     if is_opening:
         try:
-            SOCKET_R.settimeout(1)
+            SOCKET_R.settimeout(0.5)
             print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
         except: return "Player did not connect"
     else:
         for port in PORTS_R:
-            #if HOST == IP_TO_CONNECT and PORT_R == port: continue
+            if PORT_R == port: continue
             if random.randint(0, 1000) % 50 == 0: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
             try: SOCKET_S.connect((IP_TO_CONNECT, port))
             except: continue
@@ -104,7 +104,7 @@ time_out_to_recieve = 10
 def Connect():
     global STATE, PLAYER_COLOR, CUR_COLOR
     cur_timer = time.time() - timer_for_opening
-    if time_out_to_recieve <= cur_timer: ExitMultiplayer(("No avalible games", "No one connected")[IS_OPENING_GAME], menu=None); return
+    if time_out_to_recieve <= cur_timer: ExitMultiplayer(("No avalible games", "No one connected")[IS_OPENING_GAME], menu=["SESSIONS", "SESSIONS"][IS_OPENING_GAME]); return
     BUTTONS[1].text = str(round(time_out_to_recieve - cur_timer))
     BUTTONS[1].draw()
     pygame.display.flip()

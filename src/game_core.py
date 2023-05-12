@@ -1,3 +1,11 @@
+SELECTED_CHECKER = -1
+AVALIBLE_CELLS = set()
+IS_EATEN = False
+IS_SELECT_LOCKED = False
+
+EXISTING_CHECKERS = [set(), set()]
+AVALIBLE_CHECKERS = [set(), set()]
+
 def ChangeTurn():
     global CUR_COLOR
     if CUR_COLOR == 'W': CUR_COLOR = 'B'
@@ -87,6 +95,7 @@ def AvalibleTiles(ind, eating_required=False, forbidden_koef=(0, 0)):
 
 def SelectChecker(ind, forbidden_koef=(0, 0), show=True):
     global SELECTED_CHECKER
+    if ind == -1: return
     if IS_SELECT_LOCKED and ind != SELECTED_CHECKER: print("LOCKED, YOU CANT SELECT ANOTHER"); return False
     if CUR_COLOR != STATE[ind].upper(): print("IT ISNT YOUR COLOR"); return False
 

@@ -1,4 +1,8 @@
-#dont use buttons
+SESSIONS = []
+SESSION_IND = -1
+SESSIONS_PAGE = 0
+
+#doesnt use buttons
 def ReadFromFile():
     global SESSIONS
     SESSIONS = []
@@ -8,18 +12,16 @@ def ReadFromFile():
     with open(WORKING_DIR + PATH_TO_SESSIONS_FILE, 'r', encoding="utf-8") as file:
         for line in file:
             line = line.rstrip('\n')
-            if len(cur_state) == 64:
-                SESSIONS.append([])
-                SESSIONS[-1] = [cur_state[:], line[:]]
-                cur_state = ''
-            else:
-                cur_state += line
+            cur_state += line
+            if len(cur_state) == 2:
+                SESSIONS.append(cur_state)
+                cur_state = ""
 
 def WriteToFile():
     with open(WORKING_DIR + PATH_TO_SESSIONS_FILE, 'w', encoding="utf-8") as file:
         for session in SESSIONS:
-            for i in range(8): print(session[0][i * 8 : (i + 1) * 8], file=file)
-            print(session[1], file=file)
+            for i in range(8): print(session[i * 8 : (i + 1) * 8], file=file)
+            print(session[64:], file=file)
 
 def SetFromSessions(ind):
     global STATE
@@ -31,21 +33,22 @@ def SetFromSessions(ind):
     IS_SELECT_LOCKED = False
     SESSION_IND = ind
     session = SESSIONS[ind]
-    STATE = session[0][:]
-    PLAYER_COLOR = session[1][0]
-    CUR_COLOR = session[1][1]
+    STATE = session[:64]
+    PLAYER_COLOR = session[64]
+    CUR_COLOR = session[65]
     SyncWithPlayerColor()
     UpdateCheckersState()
 
 def DeleteSession(ind):
     if ind != -1: del SESSIONS[ind]
 
+def SaveGameAsNewSession():
+    SESSIONS.append(STATE[:] + PLAYER_COLOR + CUR_COLOR)
+
 def SaveSession(ind):
-    global SESSIONS
-    if ind == -1: SESSIONS.append(['', ''])
-    SESSIONS[ind][0] = STATE[:]
-    SESSIONS[ind][1] = PLAYER_COLOR + CUR_COLOR
-#dont use buttons
+    if ind == -1: SESSIONS.append("")
+    SESSIONS[ind] = STATE[:] + PLAYER_COLOR + CUR_COLOR
+#doesnt use buttons
 
 def RunSession(ind):
     global APP_STATE
