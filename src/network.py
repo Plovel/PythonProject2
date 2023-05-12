@@ -99,7 +99,7 @@ def EstConnection(is_opening):
         except: return "Player did not connect"
     else:
         for port in PORTS_R:
-            SOCKET_R.settimeout(0.2)
+            SOCKET_S.settimeout(0.2)
             if SOCKET_CHECK_REQ and PORT_R == port: continue
             if DebOut and random.randint(0, 1000) % 50 == 0:
                 if DebOut: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
