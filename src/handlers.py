@@ -256,7 +256,7 @@ def MenuHandler(event):
             if menu == "SESSIONS": SetMenu("WAITING_FOR_PLAYER False")
         elif event.key == pygame.K_x:
             ShowAvalibleButtons(menu) #shouldnt be shown in shortcuts
-        elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP"))
+        elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP+"))
         elif event.key in KEYS_TO_NUMBERS:
             if menu == "SESSIONS":
                 session = SESSIONS_PAGE * 4 + KEYS_TO_NUMBERS[event.key] - 1

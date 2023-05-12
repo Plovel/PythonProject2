@@ -30,6 +30,10 @@ def Disconnect(send=True):
         except: pass
     globals()["IS_CONNECTED"] = False
     globals()["GAME_MODE"] = "BOT"
+    try: SOCKET_R.shutdown(0)
+    except OSError: pass
+    try: SOCKET_S.shutdown(1)
+    except OSError: pass
     #SOCKET_R.close()
     #SOCKET_S.close()
     #PORT_R_FLAG, PORT_S_FLAG = False, False
@@ -67,7 +71,7 @@ def SetUpSockets():
                 continue
             SOCKET_R.bind((HOST, port))
             PORT_R = port
-            SOCKET_R.listen(1)
+            #SOCKET_R.listen(100)
             if DebOut: print(f"I USED {PORT_R} AS R PORT", HOST)
             PORT_R_FLAG = True
             break         
@@ -93,18 +97,22 @@ def EstConnection(is_opening):
     if is_opening:
         try:
             SOCKET_R.settimeout(1)
+            SOCKET_R.listen(1)
             if DebOut: print("YOU CAN CONNECT TO ME WITH", (HOST, PORT_R))
             SOCKET_R, IP_TO_CONNECT = SOCKET_R.accept()
             IP_TO_CONNECT = IP_TO_CONNECT[0]
-        except: return "Player did not connect"
+        except socket.timeout: return "Player did not connect"
     else:
         for port in PORTS_R:
-            SOCKET_S.settimeout(0.2)
+            SOCKET_S.settimeout(10)
             if SOCKET_CHECK_REQ and PORT_R == port: continue
             if DebOut and random.randint(0, 1000) % 50 == 0:
                 if DebOut: print("TRYING TO CONNECT TO", (IP_TO_CONNECT, port))
             try: SOCKET_S.connect((IP_TO_CONNECT, port))
-            except: continue
+            except socket.timeout: print("S TO\n" * DebOut, end=''); continue
+            except BlockingIOError: print("S CR1\n" * DebOut, end=''); continue
+            except ConnectionRefusedError: print("S CR2\n" * DebOut, end=''); continue
+            except: print("UNKNOWN\n" * DebOut, end=''); continue
             if DebOut: print("I CONNECTED TO", PORT_R, port)
             break
         else: return "No avalible games"
@@ -112,7 +120,7 @@ def EstConnection(is_opening):
 
 IS_OPENING_GAME = None
 timer_for_opening = time.time()
-time_out_to_recieve = 10
+time_out_to_recieve = 4
 def Connect():
     global STATE, PLAYER_COLOR, CUR_COLOR
     cur_timer = time.time() - timer_for_opening

@@ -54,5 +54,7 @@ if SAVE_CONFIG_ON_EXIT:
     res = WriteConfigToFile()
     if res: ShowText(res)
 Disconnect()
+SOCKET_R.close()
+SOCKET_S.close()
 pygame.quit()
 #exiting
