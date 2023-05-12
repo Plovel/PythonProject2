@@ -1,5 +1,32 @@
 PATH_TO_CONFIG = "config.txt"
 
+VarToText = {"WHITE_CELL": "White cell color",
+             "BLACK_CELL": "Black cell color",
+             "HIGHLIGHTED_CELL": "Avalible cell color",
+             "SELECTED_CELL": "Selected cell color",
+             "WHITE_CHECKER": "White checker color",
+             "BLACK_CHECKER": "Black checker color",
+             "KING_CROWN_COLOR": "Crown color",
+                        
+             "CHECKER_SIZE_KOEF": "Checker size",
+             "CHECKER_CROWN_KOEF": "Checker crown size",
+             "CHECKER_SELECTED_KOEF": "Selected checker size",
+             "FPS": "FPS",
+                        
+             "LOAD_SESSIONS_ON_STARTUP": "Load sessions when opening",
+             "SAVE_SESSIONS_ON_EXIT": "Save sessions when closing",
+             "DELETE_SESSION_AFTER_END": "Delete session after game ending",
+             "READ_CONFIG_ON_STARTUP": "Read config when opening",
+             "SAVE_CONFIG_ON_EXIT": "Save config when closing",
+
+             "USERNAME": "Username",
+             "HOST": "Host",
+             "IP_TO_CONNECT": "Other player IP address"}
+
+TextToVar = {VarToText[key]:key for key in VarToText}
+
+
+
 DEFAULT_CONFIG = {'WHITE_CELL': (255, 255, 255),
                   'BLACK_CELL': (128, 128, 128),
                   'HIGHLIGHTED_CELL': (0, 255, 0),
@@ -21,7 +48,7 @@ DEFAULT_CONFIG = {'WHITE_CELL': (255, 255, 255),
 
                   'USERNAME': 'Ivan Nikolayevich',
                   'HOST': '',
-                  'IP_TO_CONNECT': ''}
+                  'IP_TO_CONNECT': '192.168.1.1'}
 
 AVALIBLE_CONFIG_NAMES = ("WHITE_CELL",
                          "BLACK_CELL",
@@ -42,24 +69,32 @@ AVALIBLE_CONFIG_NAMES = ("WHITE_CELL",
                          "READ_CONFIG_ON_STARTUP",
                          "SAVE_CONFIG_ON_EXIT")
 
-AVALIBLE_CONFIG_INFO = (("COLORS", "White cell color"),
-                        ("COLORS", "Black cell color"),
-                        ("COLORS", "Avalible cell color"),
-                        ("COLORS", "Selected cell color"),
-                        ("COLORS", "White checker color"),
-                        ("COLORS", "Black checker color"),
-                        ("COLORS", "Crown color"),
+VARS_INFO = {'WHITE_CELL': ("COLORS",),
+             'BLACK_CELL': ("COLORS",),
+             'HIGHLIGHTED_CELL': ("COLORS",),
+             'SELECTED_CELL': ("COLORS",),
+             'WHITE_CHECKER': ("COLORS",),
+             'BLACK_CHECKER': ("COLORS",),
+             'KING_CROWN_COLOR': ("COLORS",),
                         
-                        ("NUMBER", "Checker size"),
-                        ("NUMBER", "Checker crown size"),
-                        ("NUMBER", "Selected checker size"),
-                        ("NUMBER", "FPS"),
+             'CHECKER_SIZE_KOEF': ("NUMBER",),
+             'CHECKER_CROWN_KOEF': ("NUMBER",),
+             'CHECKER_SELECTED_KOEF': ("NUMBER",),
+             'FPS': ("NUMBER",),
                         
-                        ("FLAG", "Load sessions when opening"),
-                        ("FLAG", "Save sessions when closing"),
-                        ("FLAG", "Delete session after game ending"),
-                        ("FLAG", "Read config when opening"),
-                        ("FLAG", "Save config when closing"))
+             'LOAD_SESSIONS_ON_STARTUP': ("FLAG",),
+             'SAVE_SESSIONS_ON_EXIT': ("FLAG",),
+             'DELETE_SESSION_AFTER_END': ("FLAG",),
+             'READ_CONFIG_ON_STARTUP': ("FLAG",),
+             'SAVE_CONFIG_ON_EXIT': ("FLAG",),
+
+             'USERNAME': ("TEXT",),
+             'HOST': ("IP",),
+             'IP_TO_CONNECT': ("IP",)}
+
+def GetVar(var):
+    if not var in VarToText: var = TextToVar.get(var, "Unknown var")
+    return var
 
 CONFIG = {}
 

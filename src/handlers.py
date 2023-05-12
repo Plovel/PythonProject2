@@ -42,6 +42,35 @@ D - set default config
 E - Manual editing (dangerous)'''
 }
 
+def ApplyVar():
+    var = BUTTONS[0].text[8:]
+    var = GetVar(var)
+    var_type = VARS_INFO[var][0]
+    if var_type == "IP":
+        val = BUTTONS[1].text.replace('|', '')
+        if not type(val) == str: ShowText("Unable convert to IP"); return
+        try: socket.inet_aton(val)
+        except socket.error: ShowText("Not correct IP address"); return
+        SetConfig({var:val})
+        SetMenu(InitInput.MENU_BKP)
+        return
+    try: val = eval(BUTTONS[1].text.replace('|', ''))
+    except: ShowText("Not correct value"); return
+    if var == "COMMAND_TO_EXECUTE":
+        SetConfig({var:val})
+        if not RUN_COMMAND(COMMAND_TO_EXECUTE):
+            ShowText("Something\nbad happened....",
+                     **{"col":RED, "txt_col":BLUE})
+    elif var_type == "COLORS":
+        try: ShowText("Test text", col=BLACK, txt_col=val, timer=0)
+        except:
+            ShowText("Not correct color")
+            SetMenu("CONFIG")
+        SetConfig({var:val})
+    else: ShowText("Failed to define variable type"); return
+    SetMenu(InitInput.MENU_BKP)
+
+
 def ShowAvalibleButtons(menu):
     message = AVALIBLE_BUTTONS.get(menu, "DEV DID NOT TELL\nWHAT TO SHOW HERE")
     ShowText(message)
@@ -52,7 +81,6 @@ def EmulateButtonPressSound():
     pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
 
 def PressButton(button):
-    global PLAYER_COLOR
     action = button.action
     if DebOut: print("ACTIVATED BUTTON", button.text)
     if action == "NONE": return
@@ -60,28 +88,16 @@ def PressButton(button):
     elif action.startswith("SET_MENU"): SetMenu(action[9:])
     elif action.startswith("SET_GAME"): ClearScreen(); RunGame(False)
     elif action == "SETTINGS": SetMenu("SETTINGS")
-    elif action == "APPLY_VAR":
-        var = BUTTONS[0].text[8:]
-        try: val = eval(BUTTONS[1].text.replace('|', ''))
-        except: ShowText("Trash value..."); return;
-        if var == "COMMAND_TO_EXECUTE":
-            globals()[var] = val
-            if not RUN_COMMAND(COMMAND_TO_EXECUTE):
-                ShowText("Something\nbad happened....",
-                         **{"col":RED, "txt_col":BLUE})
-        else:
-            try: SetConfig({var:val})
-            except: ShowText("Something went wrong")
-        SetMenu(InitInput.MENU_BKP)
+    elif action == "APPLY_VAR": ApplyVar()
     elif action == "EXIT_APP": ExitApp()
     elif action == "EXIT_APP+": ExitApp()
     elif action == "SHOW_SESSIONS": SetMenu("SESSIONS")
     elif action == "NEW_GAME": ResetGame(); SetMenu("SELECTING_COLOR")
     elif action == "SELECT_WHITE":
-        PLAYER_COLOR = 'W'
+        if PLAYER_COLOR != 'W': ChangePlayerColor()
         RunSession(SESSION_IND)
     elif action == "SELECT_BLACK":
-        PLAYER_COLOR = 'B'
+        if PLAYER_COLOR != 'B': ChangePlayerColor()
         RunSession(SESSION_IND)
     elif action.startswith("DELETE"):
         DeleteSession(int(action[6:]))
@@ -145,7 +161,7 @@ def GameHandler(event):
 MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP,
                                    pygame.MOUSEMOTION))
 def MenuHandler(event):
-    global APP_STATE
+    global APP_STATE, VAR_IND
     menu = APP_STATE[5:]
     if event.type in MENU_HANDLER_BUTTONS_EVENTS:
         pos = event.pos
@@ -181,28 +197,28 @@ def MenuHandler(event):
                 TurnSessionsPage(side='L') #
             elif menu == "CONFIG":
                 EmulateButtonPressSound()
-                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
-                SetConfigMenu((ind - 1) % len(AVALIBLE_CONFIG_NAMES))
+                VAR_IND -= 1
+                VAR_IND %= len(AVALIBLE_CONFIG_NAMES)
+                SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_RIGHT:
             if menu == "SESSIONS":
                 EmulateButtonPressSound()
                 TurnSessionsPage(side='R') #
             elif menu == "CONFIG":
                 EmulateButtonPressSound()
-                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
-                SetConfigMenu((ind + 1) % len(AVALIBLE_CONFIG_NAMES))
+                VAR_IND += 1
+                VAR_IND %= len(AVALIBLE_CONFIG_NAMES)
+                SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_DOWN:
             if menu == "CONFIG":
-                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
-                VarPrevVal(ind)
+                ChangeVal(BUTTONS[0].text, False)
                 EmulateButtonPressSound()
-                SetConfigMenu(ind)
+                SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_UP:
             if menu == "CONFIG":
-                ind = AVALIBLE_CONFIG_NAMES.index(BUTTONS[0].text)
-                VarNextVal(ind)
+                ChangeVal(BUTTONS[0].text, False)
                 EmulateButtonPressSound()
-                SetConfigMenu(ind)
+                SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_s:
             if menu == "SESSIONS":
                 WriteToFile()

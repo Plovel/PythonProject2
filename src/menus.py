@@ -31,8 +31,6 @@ def ShowSettings():
                     "col":WHITE, "txt_col":ORANGE},
                    {"txt":"Change username", "act":"SET_MENU INPUT USERNAME",
                     "col":GREY, "txt_col":ORANGE},
-                   {"txt":"Set my ip", "act":"SET_MENU INPUT HOST",
-                    "col":GREY, "txt_col":ORANGE},
                    {"txt":"Set other player ip",
                     "act":"SET_MENU INPUT IP_TO_CONNECT", "col":GREY,
                     "txt_col":ORANGE},
@@ -91,56 +89,48 @@ def ShowTestMenu():
 
 def InitInput(var, menu):
     InitInput.MENU_BKP = menu
+    var = GetVar(var)
     try: str(globals()[var])
     except: ShowText("Variable does not exist"); SetMenu("TEST"); return
-    to_show = str(globals()[var])
-    if to_show == globals()[var]:
-        to_show = '"' + to_show + '"'
-    SetSelectMenu(({"txt":"Editing " + var, "mode":"BASIC"},
-                   {"txt":to_show + "|", "mode":"BASIC", "col":BLUE[:],
+    val = globals()[var]
+    SetSelectMenu(({"txt":"Editing " + VarToText.get(var, var), "mode":"BASIC"},
+                   {"txt":str(val) + "|", "mode":"BASIC", "col":BLUE[:],
                     "cor_col":WHITE}, {"txt":"Apply", "act":"APPLY_VAR"}))
 
-def VarPrevVal(ind):
-    value_type = AVALIBLE_CONFIG_INFO[ind][0]
-    var = BUTTONS[0].text
-    if value_type == "COLORS":
+def ChangeVal(var, is_next):
+    global VAR_IND
+    if not var in VarToText: var = TextToVar[var]
+    var_type = VARS_INFO[var][0]
+    val = globals()[var]
+    if var_type == "COLORS":
         new_ind = 0
-        if globals()[var] in COLORS:
-            new_ind = (COLORS.index(globals()[var]) - 1) % len(COLORS)
-        globals()[var] = COLORS[new_ind]
-    elif value_type == "NUMBER": globals()[var] = max(0, globals()[var] - 1)
-    elif value_type == "FLAG": globals()[var] = not globals()[var]
-    SetConfig({var:globals()[var]})
-def VarNextVal(ind):
-    value_type = AVALIBLE_CONFIG_INFO[ind][0]
-    var = BUTTONS[0].text
-    if value_type == "COLORS":
-        new_ind = 0
-        if globals()[var] in COLORS:
-            new_ind = (COLORS.index(globals()[var]) + 1) % len(COLORS)
-        globals()[var] = COLORS[new_ind]
-    elif value_type == "NUMBER": globals()[var] = max(0, globals()[var] + 1)
-    elif value_type == "FLAG": globals()[var] = not globals()[var]
+        if val in COLORS:
+            new_ind = (COLORS.index(val) - 1 + 2 * is_next) % len(COLORS)
+        globals()[var] = COLORS[new_ind][:]
+    elif var_type == "NUMBER": globals()[var] = max(0, val - 1 + 2 * is_next)
+    elif var_type == "FLAG": globals()[var] = not val
     SetConfig({var:globals()[var]})
 
 def VarToButtonArgs(ind):
-    if AVALIBLE_CONFIG_INFO[ind][0] == "COLORS":
+    var_type = VARS_INFO[AVALIBLE_CONFIG_NAMES[ind]][0]
+    if var_type == "COLORS":
         cur_color = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
         return {"txt":COLORS_TO_TEXT.get(cur_color, "Unknown color"),
                 "mode":"BASIC", "col":[BLACK, WHITE][cur_color == BLACK],
                 "cor_col":WHITE, "txt_col":CONFIG[AVALIBLE_CONFIG_NAMES[ind]]}
-    elif AVALIBLE_CONFIG_INFO[ind][0] == "NUMBER":
+    elif var_type == "NUMBER":
         return {"txt":str(CONFIG[AVALIBLE_CONFIG_NAMES[ind]]),
                 "mode":"BASIC", "col":BLACK[:], "cor_col":WHITE[:],
                 "txt_col":WHITE[:]}
-    elif AVALIBLE_CONFIG_INFO[ind][0] == "FLAG":
+    elif var_type == "FLAG":
         flag = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
         return {"txt":("NO", "YES")[flag], "txt_col":WHITE,
                 "col":(RED, GREEN)[flag], "mode":"BASIC"}
 
+VAR_IND = 0
 def SetConfigMenu(ind):
     ClearScreen()
-    SetSelectMenu(({"txt":AVALIBLE_CONFIG_NAMES[ind], "mode":"BASIC"},
+    SetSelectMenu(({"txt":VarToText[AVALIBLE_CONFIG_NAMES[ind]], "mode":"BASIC"},
                    VarToButtonArgs(ind)))
     pygame.display.update()
 
@@ -155,7 +145,7 @@ def SetMenu(menu):
     elif menu == "EXITING_GAME": SetExitingGameMenu()
     elif menu == "SESSIONS": ShowSessionPage()
     elif menu == "SETTINGS": ShowSettings()
-    elif menu == "CONFIG": SetConfigMenu(0)
+    elif menu == "CONFIG": SetConfigMenu(VAR_IND)
     elif menu == "SELECTING_COLOR": SelectingColour()
     elif menu.startswith("WAITING_FOR_PLAYER"):
         ShowPlayerWaiting(APP_STATE[24:] == "True")
