@@ -1,11 +1,46 @@
-AVALIBLE_BUTTONS = {"MAIN":"G - Change game mode\nM - Go here from any menu\nT - Dev/Fun Menu",
-                    "SESSIONS":"Esc - Go to main menu\nG - Change game mode\nN - New session\nS - Save sessions to file\nR - Read sessions from file\nArrows < > - Change page\n[1, 2, 3, 4] - Select Game\nO - connect to another player",
-                    "GAME":"Esc - Session saving dialog\nG - Change game mode\nR - Rotate field\nS - Save the session\nN - save game as new session\nQ - Exit to sessions (no saving)\nO - accept connection",
-                    "SETTINGS":"Esc - Go to main menu",
-                    "EXITING_GAME":"Esc - Back to game",
-                    "SELECTING_COLOR":"Esc - Back to sessions",
-                    "CONFIG":"Esc - back to settings\nv or ^ - change value\n< or > - change variable\nS - save config to file\nR - read config from file\nD - set default config\nE - Manual editing (dangerous)"
-                    }
+AVALIBLE_BUTTONS = {
+"MAIN":
+'''G - Change game mode
+M - Go here from any menu
+T - Dev/Fun Menu''',
+ 
+"SESSIONS":
+'''Esc - Go to main menu
+G - Change game mode
+N - New session
+S - Save sessions to file
+R - Read sessions from file
+Arrows < > - Change page
+[1, 2, 3, 4] - Select Game
+O - connect to another player''',
+ 
+"GAME":
+'''Esc - Session saving dialog
+G - Change game mode
+R - Rotate field
+S - Save the session
+N - save game as new session
+Q - Exit to sessions (no saving)
+O - accept connection''',
+
+"SETTINGS":
+'''Esc - Go to main menu''',
+ 
+"EXITING_GAME":
+'''Esc - Back to game''',
+
+"SELECTING_COLOR":
+'''Esc - Back to sessions''',
+
+"CONFIG":
+'''Esc - back to settings
+v or ^ - change value
+< or > - change variable
+S - save config to file
+R - read config from file
+D - set default config
+E - Manual editing (dangerous)'''
+}
 
 def ShowAvalibleButtons(menu):
     message = AVALIBLE_BUTTONS.get(menu, "DEV DID NOT TELL\nWHAT TO SHOW HERE")
