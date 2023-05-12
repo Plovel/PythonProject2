@@ -8,12 +8,12 @@ def ReadFromFile():
     SESSIONS = []
     cur_state = ""
     if not os.path.isfile(WORKING_DIR + PATH_TO_SESSIONS_FILE):
-        with open(WORKING_DIR + PATH_TO_SESSIONS_FILE, 'w', encoding="utf-8") as file: pass
+        with open(WORKING_DIR + PATH_TO_SESSIONS_FILE, 'w', encoding="utf-8") as file: print("I CREATED NEW SESSIONS FILE")
     with open(WORKING_DIR + PATH_TO_SESSIONS_FILE, 'r', encoding="utf-8") as file:
         for line in file:
             line = line.rstrip('\n')
             cur_state += line
-            if len(cur_state) == 2:
+            if len(cur_state) == 66:
                 SESSIONS.append(cur_state)
                 cur_state = ""
 
