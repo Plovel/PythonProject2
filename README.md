@@ -29,7 +29,7 @@ If you are using MacOSX, install the game, using this command sequence:
 git clone --branch dev git@github.com:Plovel/PythonProject2.git CheckersGame
 cd CheckersGame
 brew install python3 pip
-pip install requirentments.txt
+pip install -r requirentments.txt
 ./run.sh
 ```
 
@@ -39,7 +39,7 @@ If you are using Ubuntu(or other ubuntu-type system), install the game, using ne
 git clone --branch dev git@github.com:Plovel/PythonProject2.git CheckersGame
 cd CheckersGame
 sudo apt install python3
-pip install requirentments.txt
+pip install -r requirentments.txt
 ./run.sh
 ```
 
