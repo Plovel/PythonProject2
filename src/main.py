@@ -41,9 +41,11 @@ while RUNNUNG:
             if DELETE_SESSION_AFTER_END and SESSION_IND != -1:
                 DeleteSession(SESSION_IND)
                 SESSION_IND = -1
+            if GAME_MODE == "MULTIPLAYER": Disconnect()
             SetMenu("SESSIONS")
         elif PLAYER_COLOR != CUR_COLOR and GAME_MODE != "BOT_VS_BOT":
             RunGameTurn()
+            CheckWinner()
     if GAME_MODE == "MULTIPLAYER": OtherPlayerHandler()
     if APP_STATE.startswith("MENU WAITING_FOR_PLAYER"): Connect()
     pygame.display.update() #can be removed

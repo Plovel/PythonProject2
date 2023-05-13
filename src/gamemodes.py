@@ -60,7 +60,7 @@ def RunGameTurn():
 
     winner = CheckWinner()
     if winner != "NONE":
-        print(winner, "WON")
+        if DebOut: print(winner, "WON")
         APP_STATE = "GAME END"
     
     pygame.display.flip()
