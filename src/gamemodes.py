@@ -43,14 +43,13 @@ def CheckWinner():
     return ("BLACK", "WHITE")[CUR_COLOR == 'B']    
 
 def CheckWinnerPlus():
+    global APP_STATE
     winner = CheckWinner()
     if winner != "NONE":
         if DebOut: print(winner, "WON")
         APP_STATE = "GAME END"
 
 def RunGameTurn():
-    global APP_STATE
-
     if GAME_MODE == "BOT_VS_BOT":
         if PLAYER_COLOR == CUR_COLOR: ChangePlayerColor()
 
