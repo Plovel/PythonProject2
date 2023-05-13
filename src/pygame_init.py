@@ -22,22 +22,19 @@ BUTTON_DOWN_SOUNDS = []
 def InitSounds():
     i = 1
     while True:
-        filename = PATH_TO_SOUNDS + f"checkers{i}.wav"
+        filename = PATH_TO_SOUNDS + f"checkers/checkers{i}.wav"
         if not os.path.isfile(filename): break
         CHESS_SOUNDS.append(pygame.mixer.Sound(filename))
         i += 1
 
     i = 1
     while True:
-        filename = PATH_TO_SOUNDS + f"button_up{i}.wav"
-        if not os.path.isfile(filename): break
-        BUTTON_UP_SOUNDS.append(pygame.mixer.Sound(filename))
-        i += 1
-
-    i = 1
-    while True:
-        filename = PATH_TO_SOUNDS + f"button_down{i}.wav"
-        if not os.path.isfile(filename): break
-        BUTTON_DOWN_SOUNDS.append(pygame.mixer.Sound(filename))
+        ver = 2
+        filename1 = PATH_TO_SOUNDS + f"buttons{ver}/button_up{i}.wav"
+        filename2 = PATH_TO_SOUNDS + f"buttons{ver}/button_down{i}.wav"
+        if not os.path.isfile(filename1): break
+        if not os.path.isfile(filename2): break
+        BUTTON_DOWN_SOUNDS.append(pygame.mixer.Sound(filename1))
+        BUTTON_UP_SOUNDS.append(pygame.mixer.Sound(filename2))
         i += 1
 InitSounds()

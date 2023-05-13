@@ -46,7 +46,9 @@ E - Manual editing (dangerous)'''
 def ApplyVar():
     var = BUTTONS[0].text[8:]
     var = GetVar(var)
-    var_type = VARS_INFO[var][0]
+    var_type = ""
+    if var == "Unknown variable": ShowText("Variable does not exist"); return
+    else: var_type = VARS_INFO.get(var, ("TEXT",))[0]
 
     val = BUTTONS[1].text.replace('|', '')
     if var_type == "IP":
@@ -87,9 +89,16 @@ def ShowAvalibleButtons(menu):
     ShowText(message)
 
 def EmulateButtonPressSound():
-    pygame.mixer.Sound.play(random.choice(BUTTON_DOWN_SOUNDS))
-    pygame.time.wait(100)
-    pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
+    ind = random.randint(0, len(BUTTON_DOWN_SOUNDS) - 1)
+    
+    sound_down = BUTTON_DOWN_SOUNDS[ind]
+    sound_down.set_volume(1.0)
+    sound_down.play()
+    pygame.time.wait(round(sound_down.get_length() * 100000) // 100) #idk
+    
+    sound_up = BUTTON_UP_SOUNDS[ind]
+    sound_up.set_volume(1.0)
+    sound_up.play()
 
 def PressButton(button):
     action = button.action

@@ -1,6 +1,7 @@
 def ShowBigButton():
-    SetSelectMenu(({"txt":"Big button to press",
-                    "col":ORANGE, "txt_col":BLACK_GREEN},))
+    SetSelectMenu(({"txt":"Big button",
+                    "col":ORANGE, "txt_col":BLACK_GREEN,
+                    "txt_sz":DEFAULT_FONT_SIZE * 230 // 100},))
 
 def SelectingColour():
     SetSelectMenu(({"txt":"Choose color", "mode":"BASIC"},

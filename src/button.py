@@ -13,6 +13,7 @@ def NormalSizeOfButtons(buttons):
     return ans
 
 TEST_VFX = True
+BUTTON_SOUND_IND = 0
 class Button:
 
     def __init__(self, pnt=None, sz=(None, None), act="NONE", col=None,
@@ -122,9 +123,7 @@ class Button:
         is_on_button = (True and
         (self.point[0] <= pos[0] <= self.point[0] + self.size[0]) and
         (self.point[1] <= pos[1] <= self.point[1] + self.size[1]))
-        if self.pressed and not is_on_button:
-            self.pressed = False
-            pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
+        if self.pressed and not is_on_button: self.unpress()
         expected_color = self.unselected_color
         if self.pressed: expected_color = self.pressed_color
         elif is_on_button:
@@ -148,15 +147,17 @@ class Button:
         time.sleep(timer)
 
     def press(self):
+        global BUTTON_SOUND_IND
         if self.mode == "SELECT":
             self.pressed = True
-            pygame.mixer.Sound.play(random.choice(BUTTON_DOWN_SOUNDS))
+            BUTTON_SOUND_IND = random.randint(0, len(BUTTON_DOWN_SOUNDS) - 1)
+            BUTTON_DOWN_SOUNDS[BUTTON_SOUND_IND].play()
             self.color = self.pressed_color[:]
             self.blink()
     
     def unpress(self):
         if self.mode == "SELECT":
-            pygame.mixer.Sound.play(random.choice(BUTTON_UP_SOUNDS))
+            BUTTON_UP_SOUNDS[BUTTON_SOUND_IND].play()
             self.pressed = False
             self.color = self.unselected_color[:]
             self.draw()

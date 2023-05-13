@@ -101,7 +101,11 @@ VARS_INFO = {'WHITE_CELL': ("COLORS",),
              "COMMAND_TO_EXECUTE": ("TEXT",)}
 
 def GetVar(var):
-    if not var in VarToText: var = TextToVar.get(var, "Unknown var")
+    if not var in VarToText:
+        if var in TextToVar: var = TextToVar[var]
+        else:
+            try: str(globals()[var])
+            except: var = "Unknown variable"
     return var
 
 CONFIG = {}
