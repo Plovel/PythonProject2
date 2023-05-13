@@ -109,7 +109,7 @@ class Button:
                              )
         if self.text_color != TRANSPARENT:
             font = pygame.font.SysFont(self.text_font,
-                                       self.text_size - VFX * 3)
+                                       self.text_size - VFX * 1)
             img = font.render(self.text, True, self.text_color)
             center = self.GetCenter()
             if TEST_VFX and self.pressed:
@@ -129,7 +129,7 @@ class Button:
         elif is_on_button:
             if self.mode == "SELECT":
                 if TEST_VFX:
-                    coef = 95
+                    coef = 90
                     tmp = self.unselected_color[:]
                     expected_color = (tmp[0] * coef // 100,
                                       tmp[1] * coef // 100,
