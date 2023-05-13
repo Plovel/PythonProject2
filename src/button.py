@@ -74,6 +74,7 @@ class Button:
                 self.point[1] + self.size[1] // 2)
 
     def draw(self):
+        TEST_VFX = True and self.pressed
         if self.corner_color != TRANSPARENT:
             pygame.draw.rect(screen, self.corner_color,
                              (self.point[1], self.point[0],
@@ -88,9 +89,11 @@ class Button:
                               )
                              )
         if self.text_color != TRANSPARENT:
-            font = pygame.font.SysFont(self.text_font, self.text_size)
+            font = pygame.font.SysFont(self.text_font,
+                                       self.text_size - TEST_VFX * 3)
             img = font.render(self.text, True, self.text_color)
             center = self.GetCenter()
+            if TEST_VFX: center = (center[0] + 2, center[1])
             rect = img.get_rect()
             rect.center = (center[1], center[0])
             screen.blit(img, rect.topleft)

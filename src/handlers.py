@@ -363,6 +363,8 @@ def TabNavHandler(event):
             else: EmulateMouseDown(SELECT_INDEXES[CUR_KEY_IND])
         elif event.type == pygame.KEYUP:
             EmulateMouseUp(SELECT_INDEXES[CUR_KEY_IND])
+            if BUTTONS == SAVED_BUTTONS:
+                EmulateSelect(SELECT_INDEXES[CUR_KEY_IND])
 
     pygame.display.update()
 
