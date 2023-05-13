@@ -132,8 +132,12 @@ def OtherPlayerHandler():
     except: ExitMultiplayer("Other player exited game"); return
     messages = messages.split()
     for message in messages:
-        if message == "DISCONNECT": ExitMultiplayer("Other player exited game"); return
-        elif message.startswith("MOVE"): Move(int(message[5:])); CheckWinner()
+        if message == "DISCONNECT":
+            ExitMultiplayer("Other player exited game")
+            return
+        elif message.startswith("MOVE"):
+            Move(int(message[5:]))
+            CheckWinnerPlus()
         elif message.startswith("SELECT"):
             SelectChecker(int(message[7:]), show=False)
         elif message == ("CHECK"):

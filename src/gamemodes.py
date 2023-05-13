@@ -42,6 +42,12 @@ def CheckWinner():
     if bool(AVALIBLE_CHECKERS[CUR_COLOR == 'B']): return "NONE"
     return ("BLACK", "WHITE")[CUR_COLOR == 'B']    
 
+def CheckWinnerPlus():
+    winner = CheckWinner()
+    if winner != "NONE":
+        if DebOut: print(winner, "WON")
+        APP_STATE = "GAME END"
+
 def RunGameTurn():
     global APP_STATE
 
@@ -58,9 +64,6 @@ def RunGameTurn():
     if GAME_MODE == "BOT_VS_BOT":
         if PLAYER_COLOR == CUR_COLOR: ChangePlayerColor()
 
-    winner = CheckWinner()
-    if winner != "NONE":
-        if DebOut: print(winner, "WON")
-        APP_STATE = "GAME END"
+    CheckWinnerPlus()
     
     pygame.display.flip()
