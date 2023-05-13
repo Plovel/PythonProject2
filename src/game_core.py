@@ -156,14 +156,14 @@ def ChangeChecker(ind, checker):
     global STATE
     STATE = STATE[:ind] + checker + STATE[ind + 1:]
 
-def Move(ind):
+def Move(ind, sound=True):
     global IS_SELECT_LOCKED
     if not ind in AVALIBLE_CELLS:
         if DebOut: print("Why did you press here?")
         return False
     IS_SELECT_LOCKED = False
 
-    pygame.mixer.Sound.play(random.choice(CHESS_SOUNDS))
+    if sound: pygame.mixer.Sound.play(random.choice(CHESS_SOUNDS))
     checker = STATE[SELECTED_CHECKER]
     if (ind // 8) == 7 * (checker.upper() == 'B'): checker = checker.upper()
     ChangeChecker(ind, checker)

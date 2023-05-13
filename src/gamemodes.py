@@ -25,15 +25,40 @@ def RobotRandomMove():
     SelectChecker(checker, show=False)
     Move(random.choice(tuple(AVALIBLE_CELLS)))
 
+def CanEat():
+    global AVALIBLE_CELLS, IS_EATEN
+    if len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) == 0: return false
+    bkp = (set() | AVALIBLE_CELLS, IS_EATEN)
+    AvalibleTiles(tuple(AVALIBLE_CHECKERS[CUR_COLOR == 'B'])[0])
+    ans = IS_EATEN
+    AVALIBLE_CELLS, IS_EATEN = bkp
+    return ans
+
+def MakeMove(start, end):
+    SelectChecker(start)
+    Move(end)
+
 HARD_BOT = False
 def RobotMove():
+    global STATE, PLAYER_COLOR, CUR_COLOR, SELECTED_CHECKER
     time.sleep(0.2 * (GAME_MODE != "BOT_VS_BOT"))
     if not IS_SELECT_LOCKED:
         time.sleep(len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) * 0.1 *
                    (GAME_MODE != "BOT_VS_BOT"))
-        if HARD_BOT and not (random.randint(0, 1000) % 20 == 0):
-            state_bkp = [STATE[:], PLAYER_COLOR, CUR_COLOR]
-            #for checker in AVALIBLE_CHECKERS[CUR_COLOR == 'B']: 
+        if HARD_BOT and not (random.randint(0, 1000) % 9 == 0) and not CanEat():
+            bkp1 = (STATE[:], PLAYER_COLOR, CUR_COLOR)
+            cool_moves = []
+            for checker in AVALIBLE_CHECKERS[CUR_COLOR == 'B']:
+                SelectChecker(checker, show=False)
+                for move in AVALIBLE_CELLS:
+                    SelectChecker(checker, show=False)
+                    Move(move, sound=False)
+                    if not CanEat(): cool_moves.append((checker, move))
+                    STATE, PLAYER_COLOR, CUR_COLOR = (bkp1[0][:], *bkp1[1:])
+                    UpdateCheckersState()
+            DrawField()
+            if len(cool_moves) == 0: RobotRandomMove(); return
+            MakeMove(*random.choice(cool_moves))    
         else:
             RobotRandomMove()
     else: Move(random.choice(tuple(AVALIBLE_CELLS)))
