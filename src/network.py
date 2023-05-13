@@ -125,7 +125,7 @@ def OtherPlayerHandler():
     #checking connection
 
     try: CONNECTED_SOCKET.settimeout(0.1)
-    except: ExitMultiplayer("Connection broken"); return
+    except: ExitMultiplayer("Socket is broken"); return
     messages = ''
     try: messages += CONNECTED_SOCKET.recv(1024).decode()
     except socket.timeout: pass
