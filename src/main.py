@@ -45,9 +45,7 @@ while RUNNUNG:
             SetMenu("SESSIONS")
         elif PLAYER_COLOR != CUR_COLOR and GAME_MODE != "BOT_VS_BOT":
             RunGameTurn()
-    if GAME_MODE == "MULTIPLAYER":
-        OtherPlayerHandler()
-        CheckWinner()
+    if GAME_MODE == "MULTIPLAYER": OtherPlayerHandler()
     if APP_STATE.startswith("MENU WAITING_FOR_PLAYER"): Connect()
     pygame.display.update() #can be removed
 
