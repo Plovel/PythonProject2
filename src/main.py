@@ -34,6 +34,7 @@ while RUNNUNG:
             elif APP_STATE.startswith("MENU"): MenuHandler(event)
 
     if APP_STATE.startswith("GAME"):
+        CheckWinner()
         if APP_STATE.endswith("END"):
             winner = CheckWinner()
             txt_col = (BLACK_CHECKER[:], WHITE_CHECKER)[winner == "WHITE"]
@@ -45,7 +46,6 @@ while RUNNUNG:
             SetMenu("SESSIONS")
         elif PLAYER_COLOR != CUR_COLOR and GAME_MODE != "BOT_VS_BOT":
             RunGameTurn()
-            CheckWinner()
     if GAME_MODE == "MULTIPLAYER": OtherPlayerHandler()
     if APP_STATE.startswith("MENU WAITING_FOR_PLAYER"): Connect()
     pygame.display.update() #can be removed
