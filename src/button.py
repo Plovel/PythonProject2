@@ -57,8 +57,9 @@ class Button:
                 
 
         if c_sz is None:
-            if mode == "BASIC": c_sz = max(2, min(sz) * 1 // 100)
-            elif mode == "SELECT": c_sz = 2
+            common = 2 + min(sz) // 400
+            if mode == "BASIC": c_sz = common
+            elif mode == "SELECT": c_sz = common
 
         if (pnt is None) and (center is None):
             center = (HEIGHT // 2, WIDTH // 2)
@@ -90,8 +91,7 @@ class Button:
         VFX = TEST_VFX and self.pressed
         c_sz = self.corner_size
         if VFX and c_sz != 0:
-            #add = max(1, min(self.size) * 1 // 100)
-            add = 1
+            add = 1 + min(self.size) // 400
             c_sz += add
         #if TEST_VFX and 
         #VFX
