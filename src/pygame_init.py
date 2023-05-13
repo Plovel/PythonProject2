@@ -17,16 +17,27 @@ clock = pygame.time.Clock()
 PATH_TO_SOUNDS = WD + PATH_TO_MEDIA + "sfx/"
 
 CHESS_SOUNDS = []
-for i in range(1, 7):
-    CHESS_SOUNDS.append(pygame.mixer.Sound(
-        PATH_TO_SOUNDS + f"checkers{i}.wav"))
-
 BUTTON_UP_SOUNDS = []
-for i in range(1, 2):
-    BUTTON_UP_SOUNDS.append(pygame.mixer.Sound(
-        PATH_TO_SOUNDS + f"button_up{i}.wav"))
-
 BUTTON_DOWN_SOUNDS = []
-for i in range(1, 2):
-    BUTTON_DOWN_SOUNDS.append(pygame.mixer.Sound(
-        PATH_TO_SOUNDS + f"button_down{i}.wav"))
+def InitSounds():
+    i = 1
+    while True:
+        filename = PATH_TO_SOUNDS + f"checkers{i}.wav"
+        if not os.path.isfile(filename): break
+        CHESS_SOUNDS.append(pygame.mixer.Sound(filename))
+        i += 1
+
+    i = 1
+    while True:
+        filename = PATH_TO_SOUNDS + f"button_up{i}.wav"
+        if not os.path.isfile(filename): break
+        BUTTON_UP_SOUNDS.append(pygame.mixer.Sound(filename))
+        i += 1
+
+    i = 1
+    while True:
+        filename = PATH_TO_SOUNDS + f"button_down{i}.wav"
+        if not os.path.isfile(filename): break
+        BUTTON_DOWN_SOUNDS.append(pygame.mixer.Sound(filename))
+        i += 1
+InitSounds()

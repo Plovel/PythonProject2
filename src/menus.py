@@ -1,3 +1,7 @@
+def ShowBigButton():
+    SetSelectMenu(({"txt":"Big button to press",
+                    "col":ORANGE, "txt_col":BLACK_GREEN},))
+
 def SelectingColour():
     SetSelectMenu(({"txt":"Choose color", "mode":"BASIC"},
                    {"act":"SELECT_WHITE", "txt":"White",
@@ -78,6 +82,8 @@ def ShowTestMenu():
     ClearScreen()
     SetSelectMenu(({"txt":"A button to press", "col":ORANGE,
                     "txt_col":BLACK_GREEN},
+                   {"txt":"Show big button to press", "col":ORANGE,
+                    "txt_col":BLACK_GREEN, "act":"SET_MENU BIG_BUTTON"},
                    {"txt":"Change " + changing_variable,
                     "act":"SET_MENU INPUT " + changing_variable,
                     "col":WHITE, "txt_col":RED},
@@ -152,6 +158,7 @@ def SetMenu(menu):
     elif menu == "SETTINGS": ShowSettings()
     elif menu == "CONFIG": SetConfigMenu(VAR_IND)
     elif menu == "SELECTING_COLOR": SelectingColour()
+    elif menu == "BIG_BUTTON": ShowBigButton()
     elif menu.startswith("WAITING_FOR_PLAYER"):
         ShowPlayerWaiting(APP_STATE[24:] == "True")
     pygame.display.update()

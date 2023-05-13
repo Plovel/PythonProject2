@@ -203,6 +203,7 @@ def MenuHandler(event):
             elif menu == "CONFIG": SetMenu("SETTINGS") 
             elif menu == "SELECTING_COLOR": SetMenu("SESSIONS") #
             elif menu == "TEST": SetMenu("MAIN") #??
+            elif menu == "BIG_BUTTON": SetMenu("TEST") #??
             elif menu.startswith("WAITING_FOR_PLAYER"):
                 Disconnect()
                 SetMenu(["SESSIONS", "GAME"][IS_OPENING_GAME])

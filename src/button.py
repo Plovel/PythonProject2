@@ -12,6 +12,7 @@ def NormalSizeOfButtons(buttons):
         ans[1] = max(buttons_max_sizes[1], sz[1])
     return ans
 
+TEST_VFX = True
 class Button:
 
     def __init__(self, pnt=None, sz=(None, None), act="NONE", col=None,
@@ -21,12 +22,22 @@ class Button:
         if col is None:
             if mode == "BASIC": col = TRANSPARENT[:]
             elif mode == "SELECT": col = GREEN[:]
+        unselected_color = col[:]
         if cor_col is None:
             if mode == "BASIC": cor_col = col[:]
             elif mode == "SELECT": cor_col = YELLOW[:]
         if pressed_col is None:
-            if mode == "BASIC": pressed_col = col[:]
-            elif mode == "SELECT": pressed_col = BLUE[:]
+            if TEST_VFX:
+                if mode == "BASIC": pressed_col = col[:]
+                elif mode == "SELECT":
+                    coef = 70
+                    tmp = unselected_color[:]
+                    pressed_col = (tmp[0] * coef // 100,
+                                   tmp[1] * coef // 100,
+                                   tmp[2] * coef // 100)
+            else:
+                if mode == "BASIC": pressed_col = col[:]
+                elif mode == "SELECT": pressed_col = BLUE[:]
 
         if txt_sz is None and sz == (None, None): txt_sz = DEFAULT_FONT_SIZE
         if not (txt_sz is None) and (sz == (None, None)):
@@ -66,7 +77,7 @@ class Button:
         self.text_size = txt_sz
         self.pressed_color = pressed_col[:]
 
-        self.unselected_color = self.color[:]
+        self.unselected_color = unselected_color[:]
         self.pressed = False
 
     def GetCenter(self):
@@ -74,7 +85,14 @@ class Button:
                 self.point[1] + self.size[1] // 2)
 
     def draw(self):
-        TEST_VFX = True and self.pressed
+        #VFX
+        VFX = TEST_VFX and self.pressed
+        c_sz = self.corner_size
+        if VFX and c_sz != 0:
+            coef = 120
+            c_sz = c_sz * coef // 100
+        #if TEST_VFX and 
+        #VFX
         if self.corner_color != TRANSPARENT:
             pygame.draw.rect(screen, self.corner_color,
                              (self.point[1], self.point[0],
@@ -82,21 +100,23 @@ class Button:
         if self.color != TRANSPARENT:
             pygame.draw.rect(screen,
                              self.color,
-                             (self.point[1] + self.corner_size,
-                              self.point[0] + self.corner_size,
-                              self.size[1] - self.corner_size * 2,
-                              self.size[0] - self.corner_size * 2
+                             (self.point[1] + c_sz,
+                              self.point[0] + c_sz,
+                              self.size[1] - c_sz * 2,
+                              self.size[0] - c_sz * 2
                               )
                              )
         if self.text_color != TRANSPARENT:
             font = pygame.font.SysFont(self.text_font,
-                                       self.text_size - TEST_VFX * 3)
+                                       self.text_size - VFX * 3)
             img = font.render(self.text, True, self.text_color)
             center = self.GetCenter()
-            if TEST_VFX: center = (center[0] + 2, center[1])
+            if TEST_VFX and self.pressed:
+                center = (center[0] + self.size[0] * 1 // 100, center[1])
             rect = img.get_rect()
             rect.center = (center[1], center[0])
             screen.blit(img, rect.topleft)
+        pygame.display.flip()
 
     def check_mouse(self, pos):
         is_on_button = (True and
@@ -108,7 +128,14 @@ class Button:
         expected_color = self.unselected_color
         if self.pressed: expected_color = self.pressed_color
         elif is_on_button:
-            if self.mode == "SELECT": expected_color = self.corner_color
+            if self.mode == "SELECT":
+                if TEST_VFX:
+                    coef = 95
+                    tmp = self.unselected_color[:]
+                    expected_color = (tmp[0] * coef // 100,
+                                      tmp[1] * coef // 100,
+                                      tmp[2] * coef // 100)
+                else: expected_color = self.corner_color
             elif self.mode == "BASIC": expected_color = self.color
         if expected_color != self.color:
             self.color = expected_color
