@@ -136,7 +136,12 @@ def OtherPlayerHandler():
             ExitMultiplayer("Other player exited game")
             return
         elif message.startswith("MOVE"):
-            Move(int(message[5:]))
+            prev_pos = SELECTED_CHECKER
+            moved_to = int(message[5:])
+            Move(moved_to)
+            #DrawCell(SELECTED_CHECKER, col=SELECTED_CELL)
+            #DrawCell(moved_to, col=HIGHLIGHTED_CELL)
+            #DrawChecker(moved_to)
             CheckWinnerPlus()
         elif message.startswith("SELECT"):
             SelectChecker(int(message[7:]), show=False)

@@ -1,9 +1,9 @@
 AVALIBLE_BUTTONS = {
 "MAIN":
 '''G - Change game mode
-T - Dev/Fun Menu
 X - shows hotkeys of menus
-Tab/Enter navigation avalible''',
+Tab/Enter navigation avalible
+T - Dev/Fun Menu''',
  
 "SESSIONS":
 '''Esc - Go to main menu

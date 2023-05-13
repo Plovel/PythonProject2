@@ -214,6 +214,7 @@ def RunGame(sync=True):
     APP_STATE = "GAME"
     UpdateCheckersState()
     if sync: SyncWithPlayerColor(True)
+    print(PLAYER_COLOR)
     DrawField()
     SelectChecker(SELECTED_CHECKER)
     pygame.display.flip()

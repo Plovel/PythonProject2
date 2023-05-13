@@ -67,7 +67,8 @@ DON'T PRESS 'T' BUTTON!!!
 
 ### Network issues:
 
-This part of the game conceptually isn't finished, so it can be inconvenient to use. There are a lot of crash cases were noticed, but it should't affect your game saves and config.
+This part of the game conceptually isn't finished, so it can be inconvenient to use. There are a lot of crash cases were noticed, but it should't affect your game saves and config \(but if you really need your settings and sessions, it's better to save config and sessions files).
+By now, sometimes connections may not be established correctly \(I guess because of timeouts), but \(for me) in 100% cases just attempt to connect again works.§
 
 
 ### Other issues:
