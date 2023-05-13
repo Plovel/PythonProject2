@@ -263,8 +263,10 @@ def MenuHandler(event):
         elif event.key == pygame.K_g:
             if menu in ("MAIN", "SESSIONS"): ChangeGameMode()
         elif event.key == pygame.K_t:
-            SetMenu("TEST")
-            ShowText("This menu was created\nfor joy of programming\nIt can brake the game", timer=3)
+            if menu == "MAIN":
+                SetMenu("TEST")
+                #I know it's long string; just leave it
+                ShowText("This menu was created\nfor joy of programming\nIt can brake the game", timer=3)
         elif event.key == pygame.K_n:
             if menu == "SESSIONS":
                 EmulateButtonPressSound()
