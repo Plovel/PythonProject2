@@ -11,12 +11,12 @@ def ClickFunc(pos):
     
     if STATE[ind] == ' ':
         if Move(ind) and GAME_MODE == "MULTIPLAYER":
-            try: SOCKET_S.send(("MOVE_" + str(ind) + ' ').encode())
-            except: Disconnect()
+            try: CONNECTED_SOCKET.send(("MOVE_" + str(ind) + ' ').encode())
+            except: ExitMultiplayer("Failed to send data", menu="GAME")
     else:
         if SelectChecker(ind) and GAME_MODE == "MULTIPLAYER":
-            try: SOCKET_S.send(("SELECT_" + str(ind) + ' ').encode())
-            except: Disconnect()
+            try: CONNECTED_SOCKET.send(("SELECT_" + str(ind) + ' ').encode())
+            except: ExitMultiplayer("Failed to send data", menu="GAME")
 
 def PlayerMove(): ClickFunc(pygame.mouse.get_pos())
 

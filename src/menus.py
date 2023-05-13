@@ -16,6 +16,8 @@ def SetExitingGameMenu():
 def SetMainMenu():
     globals()['SESSIONS_PAGE'] = 0
     ClearScreen()
+    AddButton(pnt=(0, 0), txt="X is pressable", txt_sz=20, c_sz=2,
+              col=BLUE, cor_col=WHITE)
     SetSelectMenu(({"txt":"CheckersOS", "txt_col":BLACK_GREEN,
                     "col":DEFAULT_CLEAR_SCREEN[:],
                     "cor_col":DEFAULT_CLEAR_SCREEN[:], "mode":"BASIC"},
@@ -62,11 +64,12 @@ def ShowPlayerWaiting(is_opening):
     IS_OPENING_GAME = is_opening
     timer_for_opening = time.time()
     if is_opening: DrawField()
-    message = ["Trying to connect", "Waiting for player"][is_opening]
+    message = ["Connecting to " + IP_TO_CONNECT,
+               "Waiting for player"][is_opening]
     SetSelectMenu(({"txt":message, "col":BLUE, "cor_col":GREEN ,
                     "mode":"BASIC"},
                    {"txt":"???", "col":BLUE, "cor_col":RED, "mode":"BASIC"}),
-                  SPACE=10, COVERAGE=(20, 60))
+                  SPACE=10, COVERAGE=(20, 80))
 
 COMMAND_TO_EXECUTE = "touch test.txt"
 changing_variable = "WHITE_CHECKER"
@@ -80,7 +83,7 @@ def ShowTestMenu():
                    {"txt":"Enter changing variable",
                     "act":"SET_MENU INPUT changing_variable", "col":WHITE,
                     "txt_col":RED},
-                   {"txt":"Ahah execute command...",
+                   {"txt":"Execute command in terminal",
                     "act":"SET_MENU INPUT COMMAND_TO_EXECUTE", "col":RED,
                     "txt_col":BLACK},
                    {"txt":"Back to main menu", "act":"SET_MENU MAIN",
@@ -142,6 +145,7 @@ def SetMenu(menu):
     ClearScreen()
     if menu.startswith("INPUT"): InitInput(APP_STATE[11:], app_state_bkp[5:])
     elif menu == "MAIN": SetMainMenu()
+    elif menu == "GAME": RunGame()
     elif menu == "EXITING_GAME": SetExitingGameMenu()
     elif menu == "SESSIONS": ShowSessionPage()
     elif menu == "SETTINGS": ShowSettings()

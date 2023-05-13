@@ -21,7 +21,9 @@ VarToText = {"WHITE_CELL": "White cell color",
 
              "USERNAME": "Username",
              "HOST": "Host",
-             "IP_TO_CONNECT": "Other player IP address"}
+             "IP_TO_CONNECT": "Other player IP address",
+
+             "COMMAND_TO_EXECUTE": "Command to execute"}
 
 TextToVar = {VarToText[key]:key for key in VarToText}
 
@@ -90,7 +92,9 @@ VARS_INFO = {'WHITE_CELL': ("COLORS",),
 
              'USERNAME': ("TEXT",),
              'HOST': ("IP",),
-             'IP_TO_CONNECT': ("IP",)}
+             'IP_TO_CONNECT': ("IP",),
+
+             "COMMAND_TO_EXECUTE": ("TEXT",)}
 
 def GetVar(var):
     if not var in VarToText: var = TextToVar.get(var, "Unknown var")

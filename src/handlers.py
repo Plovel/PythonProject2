@@ -1,8 +1,9 @@
 AVALIBLE_BUTTONS = {
 "MAIN":
 '''G - Change game mode
-M - Go here from any menu
-T - Dev/Fun Menu''',
+T - Dev/Fun Menu
+X - shows hotkeys of menus
+Tab/Enter navigation avalible''',
  
 "SESSIONS":
 '''Esc - Go to main menu
@@ -46,27 +47,32 @@ def ApplyVar():
     var = BUTTONS[0].text[8:]
     var = GetVar(var)
     var_type = VARS_INFO[var][0]
+
+    val = BUTTONS[1].text.replace('|', '')
     if var_type == "IP":
-        val = BUTTONS[1].text.replace('|', '')
         if not type(val) == str: ShowText("Unable convert to IP"); return
         try: socket.inet_aton(val)
         except socket.error: ShowText("Not correct IP address"); return
         SetConfig({var:val})
         SetMenu(InitInput.MENU_BKP)
         return
-    try: val = eval(BUTTONS[1].text.replace('|', ''))
-    except: ShowText("Not correct value"); return
-    if var == "COMMAND_TO_EXECUTE":
+    
+    elif var == "COMMAND_TO_EXECUTE":
         SetConfig({var:val})
         if not RUN_COMMAND(COMMAND_TO_EXECUTE):
             ShowText("Something\nbad happened....",
                      **{"col":RED, "txt_col":BLUE})
-    elif var_type == "COLORS":
+        return
+    
+    try: val = eval(val)
+    except: ShowText("Not correct value"); return
+    if var_type == "COLORS":
         try: ShowText("Test text", col=BLACK, txt_col=val, timer=0)
         except:
             ShowText("Not correct color")
             SetMenu("CONFIG")
         SetConfig({var:val})
+    elif var_type == "TEXT": SetConfig({var:val})
     else: ShowText("Failed to define variable type"); return
     SetMenu(InitInput.MENU_BKP)
 
@@ -152,7 +158,9 @@ def GameHandler(event):
         elif event.key == pygame.K_q:
             if GAME_MODE == "MULTIPLAYER": Disconnect()
             SetMenu("SESSIONS")
-        elif event.key == pygame.K_o: SetMenu("WAITING_FOR_PLAYER True")
+        elif event.key == pygame.K_o:
+            if GAME_MODE == "MULTIPLAYER": ShowText("You are connected")
+            else: SetMenu("WAITING_FOR_PLAYER True")
         elif event.key == pygame.K_c:
             SaveGameAsNewSession()
             ShowText("Game saved into new session")
@@ -190,7 +198,9 @@ def MenuHandler(event):
             elif menu == "CONFIG": SetMenu("SETTINGS") 
             elif menu == "SELECTING_COLOR": SetMenu("SESSIONS") #
             elif menu == "TEST": SetMenu("MAIN") #??
-        elif event.key == pygame.K_m: SetMenu("MAIN") #??
+            elif menu.startswith("WAITING_FOR_PLAYER"):
+                Disconnect()
+                SetMenu(["SESSIONS", "GAME"][IS_OPENING_GAME])
         elif event.key == pygame.K_LEFT:
             if menu == "SESSIONS":
                 EmulateButtonPressSound()
@@ -256,7 +266,7 @@ def MenuHandler(event):
             if menu == "SESSIONS": SetMenu("WAITING_FOR_PLAYER False")
         elif event.key == pygame.K_x:
             ShowAvalibleButtons(menu) #shouldnt be shown in shortcuts
-        elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP+"))
+        #elif event.key == pygame.K_b: PressButton(Button(act="EXIT_APP+"))
         elif event.key in KEYS_TO_NUMBERS:
             if menu == "SESSIONS":
                 session = SESSIONS_PAGE * 4 + KEYS_TO_NUMBERS[event.key] - 1
