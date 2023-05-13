@@ -29,7 +29,7 @@ if os.path.isdir(PATH_FOR_OUTPUT):
 else:
     os.mkdir(PATH_FOR_OUTPUT)
 
-IMPORT_MESSAGE_LEN = 70
+IMPORT_MESSAGE_LEN = 80
 def ToPrint(message):
     left = (IMPORT_MESSAGE_LEN - 1 - len(message)) // 2
     right = IMPORT_MESSAGE_LEN - 1 - len(message) - left

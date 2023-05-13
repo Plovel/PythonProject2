@@ -18,6 +18,12 @@ In multiplayer mode, by now, available opponent selection by setting up his 'ip 
 You can manage the game sessions, you've played earlier. For example, you can save the game sessions into file and load them whenever you want.
 With editing config menu, you can customize a bunch of settings (also supports file saves).
 
+![main menu](readme_pics/main_menu.png)
+![sessions](readme_pics/sessions.png)
+![config](readme_pics/config.png)
+![editing var](readme_pics/editing_var.png)
+![shortcuts](readme_pics/shortcuts.png)
+![customisation](readme_pics/customised_game.png)
 
 ## Installation and Quick-Start
 

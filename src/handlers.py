@@ -63,17 +63,22 @@ def ApplyVar():
             ShowText("Something\nbad happened....",
                      **{"col":RED, "txt_col":BLUE})
         return
-    
-    try: val = eval(val)
-    except: ShowText("Not correct value"); return
-    if var_type == "COLORS":
-        try: ShowText("Test text", col=BLACK, txt_col=val, timer=0)
-        except:
-            ShowText("Not correct color")
-            SetMenu("CONFIG")
-        SetConfig({var:val})
     elif var_type == "TEXT": SetConfig({var:val})
-    else: ShowText("Failed to define variable type"); return
+    
+    else:
+        try: val = eval(val)
+        except: ShowText("Not correct value"); return
+        if var_type == "COLORS":
+            try: ShowText("Test text", col=BLACK, txt_col=val, timer=0)
+            except:
+                ShowText("Not correct color")
+                SetMenu("CONFIG")
+            SetConfig({var:val})
+        elif var_type == "NUMBER":
+            if int(val) != val or val < 0:
+                ShowText("Invalid integer"); return
+            SetConfig({var:val})
+        else: ShowText("Failed to define variable type"); return
     SetMenu(InitInput.MENU_BKP)
 
 
@@ -226,7 +231,7 @@ def MenuHandler(event):
                 SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_UP:
             if menu == "CONFIG":
-                ChangeVal(BUTTONS[0].text, False)
+                ChangeVal(BUTTONS[0].text, True)
                 EmulateButtonPressSound()
                 SetConfigMenu(VAR_IND)
         elif event.key == pygame.K_s:
@@ -245,7 +250,10 @@ def MenuHandler(event):
                 SetMenu("SESSIONS")
             elif menu == "CONFIG":
                 res = ReadConfigFromFile()
-                if not res: ShowText("Config was read")
+                if not res:
+                    SetConfigMenu(VAR_IND)
+                    pygame.display.flip()
+                    ShowText("Config was read")
                 else: ShowText("Failed to read config\nReason: " + res)
         elif event.key == pygame.K_d:
             if menu == "CONFIG":
@@ -272,7 +280,7 @@ def MenuHandler(event):
                 session = SESSIONS_PAGE * 4 + KEYS_TO_NUMBERS[event.key] - 1
                 if 0 <= session < len(SESSIONS): RunSession(session)
                 elif session == len(SESSIONS):
-                    ResetState()
+                    ResetGame()
                     SetMenu("SELECTING_COLOR")
         elif event.key == pygame.K_e:
             if menu == "CONFIG":

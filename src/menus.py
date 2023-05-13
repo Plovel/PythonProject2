@@ -68,7 +68,8 @@ def ShowPlayerWaiting(is_opening):
                "Waiting for player"][is_opening]
     SetSelectMenu(({"txt":message, "col":BLUE, "cor_col":GREEN ,
                     "mode":"BASIC"},
-                   {"txt":"???", "col":BLUE, "cor_col":RED, "mode":"BASIC"}),
+                   {"txt":str(time_out_to_recieve), "col":BLUE, "cor_col":RED,
+                    "mode":"BASIC"}),
                   SPACE=10, COVERAGE=(20, 80))
 
 COMMAND_TO_EXECUTE = "touch test.txt"
