@@ -136,7 +136,7 @@ def VarToButtonArgs(ind):
                 "txt_col":WHITE[:]}
     elif var_type == "FLAG":
         flag = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
-        return {"txt":("NO", "YES")[flag], "txt_col":WHITE,
+        return {"txt":("No", "Yes")[flag], "txt_col":WHITE,
                 "col":(RED, GREEN)[flag], "mode":"BASIC"}
 
 VAR_IND = 0
