@@ -201,7 +201,8 @@ def MenuHandler(event):
         pos = event.pos
         pos = (pos[1], pos[0])
         for button in BUTTONS:
-            if button.check_mouse(pos):
+            button.check_mouse(pos)
+            if button.selected:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     button.press()
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:

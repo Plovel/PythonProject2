@@ -17,6 +17,12 @@ TEXT_TO_COLORS = {"BLACK":(0, 0, 0),
                   "BLUE":(0, 0, 255),
                   "GREY":(128, 128, 128),
                   "YELLOW":(255, 255, 0)}
+if True:
+    maxval = 230
+    for key in TEXT_TO_COLORS:
+        col = TEXT_TO_COLORS[key]
+        TEXT_TO_COLORS[key] = tuple([min(maxval, val) for val in col])
+
 COLORS_TO_TEXT = {}
 for key, val in TEXT_TO_COLORS.items(): COLORS_TO_TEXT[val] = key
 COLORS = [val[:] for val in TEXT_TO_COLORS.values()]
