@@ -82,6 +82,7 @@ def ApplyVar():
             except:
                 ShowText("Not correct color")
                 SetMenu("CONFIG")
+                return
             SetConfig({var:val})
         elif var_type == "NUMBER":
             if int(val) != val or val < 0:
