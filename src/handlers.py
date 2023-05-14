@@ -40,7 +40,14 @@ v or ^ - change value
 S - save config to file
 R - read config from file
 D - set default config
-E - Manual editing (dangerous)'''
+E - Manual editing (dangerous)''',
+
+"WAITING_FOR_PLAYER True":
+'''Esc - back to game''',
+
+
+"WAITING_FOR_PLAYER False":
+'''Esc - back to sessions'''
 }
 
 def ApplyVar():
