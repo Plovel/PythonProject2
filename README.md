@@ -75,8 +75,11 @@ By now, multiplayer works as should, but sometimes connections may not be establ
 The rest part of the game should be pretty stable. Serious functional bugs weren't noticed.
 
 ## To do
-- \(Most likely) Menu impovements
-- Rework network mechanics
+- \(Most likely it will be here always) Menu impovements
+- Rework network mechanics (I wanted to set convenient menu for selecting players; here should be used username and other player's map preview)
+- By interrupting game process (like exiting session), by now, info about locked checker (when you was eating, if you can eat more by the selected checker, you have to use the checker until you can't eat more)
+- Smarter bot (added another bot behavior, but it's still too boring, thats why it's "alternative", not "hard")
+- When a checker reach other side of the field by eating, it immediately can make long steps to eat more; I think it should't be so
 
 ## Collaborators
 [Pavel Sidletskiy](https://t.me/vendor_vachupa)
