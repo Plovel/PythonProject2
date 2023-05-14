@@ -27,7 +27,7 @@ def RobotRandomMove():
 
 def CanEat():
     global AVALIBLE_CELLS, IS_EATEN
-    if len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) == 0: return false
+    if len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) == 0: return False
     bkp = (set() | AVALIBLE_CELLS, IS_EATEN)
     AvalibleTiles(tuple(AVALIBLE_CHECKERS[CUR_COLOR == 'B'])[0])
     ans = IS_EATEN
