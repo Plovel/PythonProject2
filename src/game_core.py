@@ -51,7 +51,9 @@ def PutChecker():
     global SELECTED_CHECKER
     global AVALIBLE_CELLS
     global IS_EATEN
-    if IS_SELECT_LOCKED: print("Selection locked, cant put checker"); return
+    if IS_SELECT_LOCKED:
+        if DebOut: print("Selection locked, cant put checker")
+        return
     if SELECTED_CHECKER == -1: return
     
     ReDrawItem(SELECTED_CHECKER)
@@ -70,7 +72,9 @@ def AvalibleTiles(ind, eating_required=False, forbidden_koef=(0, 0)):
 
     checker = STATE[ind]
     i, j = ind // 8, ind % 8
-    if checker == ' ': print("AVALIBLE FOR VOID?"); return
+    if checker == ' ':
+        if DebOut: print("AVALIBLE FOR VOID?")
+        return
     simple_move_i_koef = -1 + 2 * (checker.upper() == "B")
     avalible_length = 1 + 6 * (checker.isupper())
     for i_koef in (-1, 1):
