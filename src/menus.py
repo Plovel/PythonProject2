@@ -104,7 +104,8 @@ def InitInput(var, menu):
     try: str(globals()[var])
     except: ShowText("Variable does not exist"); SetMenu("TEST"); return
     val = globals()[var]
-    SetSelectMenu(({"txt":"Editing " + VarToText.get(var, var), "mode":"BASIC"},
+    SetSelectMenu(({"txt":"Editing " + VarToText.get(var, var),
+                    "mode":"BASIC"},
                    {"txt":str(val) + "|", "mode":"BASIC", "col":BLUE[:],
                     "cor_col":WHITE}, {"txt":"Apply", "act":"APPLY_VAR"}))
 
@@ -141,7 +142,8 @@ def VarToButtonArgs(ind):
 VAR_IND = 0
 def SetConfigMenu(ind):
     ClearScreen()
-    SetSelectMenu(({"txt":VarToText[AVALIBLE_CONFIG_NAMES[ind]], "mode":"BASIC"},
+    SetSelectMenu(({"txt":VarToText[AVALIBLE_CONFIG_NAMES[ind]],
+                    "mode":"BASIC"},
                    VarToButtonArgs(ind)))
     pygame.display.update()
 

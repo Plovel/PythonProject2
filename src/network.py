@@ -116,7 +116,9 @@ def OtherPlayerHandler():
     if is_check_req and time.time() - req_time > req_timeout:
         if DebOut: print("CONNECTION CHECK FAILED")
         globals()["is_check_req"] = False
-        if check_works: ExitMultiplayer("Player's app did not response"); return
+        if check_works:
+            ExitMultiplayer("Player's app did not response")
+            return
     if random.randint(0, 10000) % 50 == 0:
         try:
             CONNECTED_SOCKET.settimeout(0.1)

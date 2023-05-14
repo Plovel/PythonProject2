@@ -184,8 +184,8 @@ def GameHandler(event):
             ShowText("Game saved into new session")
             
 
-MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP,
-                                   pygame.MOUSEMOTION))
+MENU_HANDLER_BUTTONS_EVENTS = set((pygame.MOUSEBUTTONDOWN,
+                                   pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION))
 def MenuHandler(event):
     global APP_STATE, VAR_IND
     menu = APP_STATE[5:]

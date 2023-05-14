@@ -45,7 +45,8 @@ def RobotMove():
     if not IS_SELECT_LOCKED:
         time.sleep(len(AVALIBLE_CHECKERS[CUR_COLOR == 'B']) * 0.1 *
                    (GAME_MODE != "BOT_VS_BOT"))
-        if HARD_BOT and not (random.randint(0, 1000) % 9 == 0) and not CanEat():
+        if (HARD_BOT and not (random.randint(0, 1000) % 9 == 0) and
+            not CanEat()):
             bkp1 = (STATE[:], PLAYER_COLOR, CUR_COLOR)
             cool_moves = []
             for checker in AVALIBLE_CHECKERS[CUR_COLOR == 'B']:
