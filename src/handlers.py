@@ -197,9 +197,9 @@ def MenuHandler(event):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     button.press()
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                    was_pressed = button.pressed
-                    if was_pressed:
+                    if button.pressed:
                         button.unpress()
+                        button.check_mouse(pos)
                         if button.action == "NONE": continue
                         PressButton(button)
                 
