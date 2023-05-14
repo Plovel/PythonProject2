@@ -128,7 +128,7 @@ def VarToButtonArgs(ind):
     if var_type == "COLORS":
         cur_color = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
         return {"txt":COLORS_TO_TEXT.get(cur_color, "Unknown color"),
-                "mode":"BASIC", "col":[BLACK, WHITE][cur_color == BLACK],
+                "mode":"BASIC", "col":[BLACK, WHITE][sum(cur_color) < 128],
                 "cor_col":WHITE, "txt_col":CONFIG[AVALIBLE_CONFIG_NAMES[ind]]}
     elif var_type == "NUMBER":
         return {"txt":str(CONFIG[AVALIBLE_CONFIG_NAMES[ind]]),
