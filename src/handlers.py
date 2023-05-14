@@ -152,21 +152,25 @@ def InputHandler(event):
     pygame.display.flip()
 
 def GameHandler(event):
+    global SESSION_IND
     if APP_STATE.endswith("END"): return
     if event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1:
             RunGameTurn()
 
     elif event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE: SetMenu("EXITING_GAME")
+        if event.key == pygame.K_ESCAPE:
+            if (SESSION_IND != -1 and
+                STATE + PLAYER_COLOR + CUR_COLOR != SESSIONS[SESSION_IND]):
+                SetMenu("EXITING_GAME")
+            else: SetMenu("SESSIONS")
         elif event.key == pygame.K_g: ChangeGameMode()
         elif event.key == pygame.K_r:
             ReverseOrientation(True)
             ShowText("Orientation was changed")
         elif event.key == pygame.K_s:
-            global SESSION_IND
             SaveSession(SESSION_IND)
-            if SESSION_IND == -1: SESSION_IND = len(SESSIONS) - 1
+            if SESSION_IND == -1: SESSION_IND += len(SESSIONS)
             ShowText("Session Saved", timer=0.3)
         elif event.key == pygame.K_x: ShowAvalibleButtons("GAME")
         elif event.key == pygame.K_q:
