@@ -59,9 +59,8 @@ ip address
 ### Quick-Start
 
 You can use mouse navigation, but in the menus you can also use 'tab-enter' and arrows to navigate.
-To see all the Hotkeys, available in current menu, press 'X'.
-DON'T PRESS 'T' BUTTON!!!
-
+To see all the hotkeys, available in current menu, press 'X'.
+T hotkey was created for fun, in this menu you can, for example, execute bash scripts; I don't pay much attention to this menu workability, use on your risk
 
 ## Known Bugs
 
