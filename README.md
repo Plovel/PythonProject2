@@ -34,12 +34,14 @@ If you are using MacOSX, install the game, using this command sequence:
 ```
 git clone --branch dev git@github.com:Plovel/PythonProject2.git CheckersGame
 cd CheckersGame
+brew update
 brew install python3 pip
 pip install -r requirentments.txt
+./install.sh
 ./run.sh
 ```
 
-If you are using Ubuntu(or other ubuntu-type system), install the game, using next command sequence:
+If you are using Ubuntu (or other ubuntu-type system), install the game, using next command sequence:
 
 ```
 git clone --branch dev git@github.com:Plovel/PythonProject2.git CheckersGame
@@ -47,18 +49,20 @@ cd CheckersGame
 sudo apt-get update
 sudo apt-get install python3
 pip install -r requirentments.txt
+./install.sh
 ./run.sh
 ```
 
-If you want to get your ip address for local game, enter this command to the command line:
-
+If you want to get your ip address, you can use this:
+  For Linux:
 ```
 ip address
 ```
+  For MacOSX: it's better just to go to "Details" menu of your current connection
 
 ### Quick-Start
 
-You can use mouse navigation, but in the menus you can also use 'tab-enter' and arrows to navigate.
+You can use mouse navigation, but in the menus with buttons you can also use 'tab-enter' and arrows to navigate.
 To see all the hotkeys, available in current menu, press 'X'.
 T hotkey was created for fun, in this menu you can, for example, execute bash scripts; I don't pay much attention to this menu workability, use on your risk
 
@@ -77,7 +81,7 @@ The rest part of the game should be pretty stable. Serious functional bugs weren
 ## To do
 - \(Most likely it will be here always) Menu impovements
 - Rework network mechanics (I wanted to set convenient menu for selecting players, without any IP changing by player; here should be used username and other player's map preview)
-- By interrupting game process (like exiting session), by now, info about locked checker is lost(when you was eating, if you can eat more by the selected checker, you have to use the checker until you can't eat more)
+- By interrupting game process (like exiting session), by now, info about locked checker is lost (when you was eating, if you can eat more by the selected checker, you have to use the checker until you can't eat more)
 - Smarter bot (added another bot behavior, but it's still too boring, thats why it's "alternative", not "hard")
 - When a checker reach other side of the field by eating, it immediately can make long steps to eat more; I think it should't be so
 
