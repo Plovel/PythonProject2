@@ -21,7 +21,7 @@ def SetExitingGameMenu():
 def SetMainMenu():
     globals()['SESSIONS_PAGE'] = 0
     ClearScreen()
-    AddButton(pnt=(0, 0), txt="X is pressable", txt_sz=20, c_sz=2,
+    AddButton(pnt=(0, 0), txt="X is pressable", txt_sz=30,
               col=BLUE, cor_col=WHITE)
     SetSelectMenu(({"txt":"CheckersOS", "txt_col":BLACK_GREEN,
                     "col":DEFAULT_CLEAR_SCREEN[:],
