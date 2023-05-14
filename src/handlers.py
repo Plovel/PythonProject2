@@ -160,7 +160,7 @@ def GameHandler(event):
 
     elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
-            if (SESSION_IND != -1 or
+            if (SESSION_IND == -1 or
                 STATE + PLAYER_COLOR + CUR_COLOR != SESSIONS[SESSION_IND]):
                 SetMenu("EXITING_GAME")
             else: SetMenu("SESSIONS")
