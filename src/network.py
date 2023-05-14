@@ -118,7 +118,9 @@ def OtherPlayerHandler():
         globals()["is_check_req"] = False
         if check_works: ExitMultiplayer("Player's app did not response"); return
     if random.randint(0, 10000) % 50 == 0:
-        try: CONNECTED_SOCKET.settimeout(0.1); CONNECTED_SOCKET.send("CHECK ".encode())
+        try:
+            CONNECTED_SOCKET.settimeout(0.1)
+            CONNECTED_SOCKET.send("CHECK ".encode())
         except: ExitMultiplayer("Bad connection to player"); return
         globals()["is_check_req"] = True
         globals()["req_time"] = time.time()

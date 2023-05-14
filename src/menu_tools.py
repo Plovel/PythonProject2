@@ -60,7 +60,9 @@ def ShowText(text, timer=None, **kwargs):
     for i in range(len(lines)): del BUTTONS[-1]
     screen.blit(GLOBAL_SURFACE, (0, 0))
     #strange stuff
-    if APP_STATE.startswith("GAME"): DrawField(); SelectChecker(SELECTED_CHECKER)
+    if APP_STATE.startswith("GAME"):
+        DrawField()
+        SelectChecker(SELECTED_CHECKER)
     if APP_STATE.endswith("SESSIONS"): ShowSessionPage()
     #strange stuff
     pygame.display.flip()

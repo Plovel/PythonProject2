@@ -279,8 +279,7 @@ def MenuHandler(event):
         elif event.key == pygame.K_t:
             if menu == "MAIN":
                 SetMenu("TEST")
-                #I know it's long string; just leave it
-                ShowText("This menu was created\nfor joy of programming\nIt can brake the game", timer=3)
+                ShowText("For dev joy\nIt can brake the game", timer=1)
         elif event.key == pygame.K_n:
             if menu == "SESSIONS":
                 EmulateButtonPressSound()
@@ -360,7 +359,7 @@ def TabNavHandler(event):
     global SELECT_INDEXES
     if len(BUTTONS) == 0: return
     if SAVED_BUTTONS != BUTTONS:
-        SAVED_BUTTONS = BUTTONS
+        SAVED_BUTTONS = BUTTONS[:]
         SELECT_INDEXES = []
         for i in range(len(BUTTONS)):
             if BUTTONS[i].mode == "SELECT": SELECT_INDEXES.append(i)
@@ -376,9 +375,8 @@ def TabNavHandler(event):
             if CUR_KEY_IND == -1: CUR_KEY_IND = 0; EmulateSelect(CUR_KEY_IND)
             else: EmulateMouseDown(SELECT_INDEXES[CUR_KEY_IND])
         elif event.type == pygame.KEYUP:
+            EmulateSelect(SELECT_INDEXES[CUR_KEY_IND])
             EmulateMouseUp(SELECT_INDEXES[CUR_KEY_IND])
-            if BUTTONS == SAVED_BUTTONS:
-                EmulateSelect(SELECT_INDEXES[CUR_KEY_IND])
 
     pygame.display.update()
 
