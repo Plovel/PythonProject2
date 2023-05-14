@@ -137,7 +137,7 @@ def VarToButtonArgs(ind):
     elif var_type == "FLAG":
         flag = CONFIG[AVALIBLE_CONFIG_NAMES[ind]]
         return {"txt":("No", "Yes")[flag], "txt_col":WHITE,
-                "col":(RED, GREEN)[flag], "mode":"BASIC"}
+                "col":(RED, GREEN)[flag], "cor_col":WHITE, "mode":"BASIC"}
 
 VAR_IND = 0
 def SetConfigMenu(ind):
