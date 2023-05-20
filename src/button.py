@@ -79,8 +79,8 @@ class Button:
         self.pressed = False
         self.selected = False
         if offset is None:
-            if mode == "SELECT": offset = (sz[1] * 3 // 100,
-                                           sz[1] * 1 // 100)
+            if mode == "SELECT": offset = (max(sz[1] * 1 // 100, 4),
+                                           2)
             elif mode == "BASIC": offset = (0, 0)
         self.offset = offset[:]
         
@@ -106,7 +106,7 @@ class Button:
         #prep
         
         ind = BUTTONS.index(self)
-        if check and ind != 0: BUTTONS[ind - 1].draw(check=False)
+        #if check and ind != 0: BUTTONS[ind - 1].draw(check=False)
         
         if self.corner_color != TRANSPARENT:
             pygame.draw.rect(screen, self.corner_color,
@@ -149,8 +149,8 @@ class Button:
             rect.center = (center[1], center[0])
             screen.blit(img, rect.topleft)
         
-        if check and ind < len(BUTTONS) - 1: BUTTONS[ind + 1].draw(check=True)
-        if check: pygame.display.flip()
+        #if check and ind < len(BUTTONS) - 1: BUTTONS[ind + 1].draw(check=False)
+        #if check: pygame.display.flip()
 
     def check_mouse(self, pos):
         is_on_button = (True and
