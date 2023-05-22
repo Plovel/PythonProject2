@@ -105,7 +105,7 @@ class Button:
                           sz[1], sz[0] + max(self.offset) - c_sz))
         #prep
         
-        ind = BUTTONS.index(self)
+        #ind = BUTTONS.index(self)
         #if check and ind != 0: BUTTONS[ind - 1].draw(check=False)
         
         if self.corner_color != TRANSPARENT:
