@@ -21,6 +21,7 @@ G - Change game mode
 R - Rotate field
 S - Save the session
 N - save game as new session
+C - save game into new session
 Q - Exit to sessions (no saving)
 O - accept connection''',
 

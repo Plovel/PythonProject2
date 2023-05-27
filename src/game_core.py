@@ -115,6 +115,10 @@ def SelectChecker(ind, forbidden_koef=(0, 0), show=True):
         if DebOut: print("IT ISNT YOUR COLOR")
         return False
 
+    if SELECTED_CHECKER == ind:
+        PutChecker()
+        if show: pygame.mixer.Sound.play(random.choice(CHESS_SOUNDS))
+        return True
     PutChecker()
     SELECTED_CHECKER = ind
     

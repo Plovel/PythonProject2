@@ -33,14 +33,14 @@ TextToVar = {VarToText[key]:key for key in VarToText}
 DEFAULT_CONFIG = {'WHITE_CELL': WHITE[:],
                   'BLACK_CELL': GREY[:],
                   'HIGHLIGHTED_CELL': GREEN[:],
-                  'SELECTED_CELL': BLUE[:],
+                  'SELECTED_CELL': ORANGE[:],
                   'WHITE_CHECKER': RED[:],
-                  'BLACK_CHECKER': ALMOST_BLACK[:],
+                  'BLACK_CHECKER': BLUE[:],
                   'KING_CROWN_COLOR': YELLOW[:],
                   
                   'CHECKER_SIZE_KOEF': 65,
                   'CHECKER_CROWN_KOEF': 30,
-                  'CHECKER_SELECTED_KOEF': 130,
+                  'CHECKER_SELECTED_KOEF': 120,
                   'FPS': 60,
 
                   'LOAD_SESSIONS_ON_STARTUP': True,

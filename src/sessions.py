@@ -67,7 +67,8 @@ def DrawSession(num, ind):
     j_diff = WIDTH // 2
     corner = (HEIGHT // 20, WIDTH // 20)
     cell_sz = (i_diff - corner[0] * 2) // 8
-    point = (corner[0] + i_diff * (num // 2), corner[1] + j_diff * (num % 2))
+    point = (corner[0] + i_diff * (num // 2),
+             corner[1] + j_diff * (num % 2))
     txt_sz = 30 #idk
     plus_sz = 45 #idk too
     if ind != -1:
